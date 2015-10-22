@@ -1,0 +1,25 @@
+{
+    "name": "phossa/phossa-event",
+    "version": "1.0.0",
+    "license": "MIT",
+    "type": "library",
+    "description": "The event package of Phossa framework",
+    "keywords": ["phossa", "framework", "event"],
+    "homepage": "https://github.com/phossa/phossa-event",
+    "authors": [
+        {
+            "name": "Hong Zhang",
+            "homepage": "https://github.com/phossa"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "Phossa\\Event\\": "lib/" }
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "phossa-shared": "*"
+    },
+    "archive": {
+        "exclude": ["!vendor", "tests", "*phpunit.xml",  "composer.lock"]
+    }
+}
