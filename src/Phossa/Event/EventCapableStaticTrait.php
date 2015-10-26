@@ -13,60 +13,66 @@ namespace Phossa\Event;
 use Phossa\Event\Message\Message;
 
 /**
- * EventCapableTrait
- *
- * Simple implementation of EventCapableInterface
+ * Simple implementation of EventCapableStaticInterface
  *
  * @trait
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     EventCapableStaticInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
-trait EventCapableTrait
+trait EventCapableStaticTrait
 {
     /**
      * event manager
      *
+     * each descendant classes of class using this trait may define its
+     * own copy of protected event manager.
+     *
      * @var    EventManagerInterface
      * @type   EventManagerInterface
      * @access protected
+     * @static
      */
-    protected $event_manager = null;
+    protected static $event_manager = null;
 
     /**
      * event factory
      *
+     * each descendant classes of class using this trait may define its
+     * own copy of protected event factory.
+     *
      * @var    EventFactoryInterface
      * @type   EventFactoryInterface
      * @access protected
+     * @static
      */
-    protected $event_factory = null;
+    protected static $event_factory = null;
 
     /**
      * {@inheritDoc}
      */
-    public function setEventCapable(
+    public static function setEventCapable(
         EventManagerInterface $eventManager,
         EventFactoryInterface $eventFactory
-    )/*# : EventCapableInterface */ {
-        $this->event_manager = $eventManager;
-        $this->event_factory = $eventFactory;
-        return $this;
+    )/*# : void */ {
+        static::$event_manager = $eventManager;
+        static::$event_factory = $eventFactory;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function triggerEvent(
+    public static function triggerEvent(
         /*# string */ $eventName,
         array $properties = []
     )/*# : EventInterface */ {
-        if (null !== $this->event_manager) {
-            return $this->event_manager->processEvent(
-                $this->event_factory->createEvent(
+        if (null !== static::$event_manager) {
+            return static::$event_manager->processEvent(
+                static::$event_factory->createEvent(
                     $eventName,
-                    $this,
+                    get_called_class(),
                     $properties
                 )
             );
@@ -74,7 +80,7 @@ trait EventCapableTrait
         throw new Exception\NotFoundException(
             Message::get(
                 Message::MANAGER_NOT_FOUND,
-                get_class()
+                get_called_class()
             ),
             Message::MANAGER_NOT_FOUND
         );

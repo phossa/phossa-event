@@ -76,16 +76,6 @@ class EventQueueTest
     }
 
     /**
-     * @covers Phossa\Event\EventQueue::insert
-     * @expectedExceptionCode Phossa\Event\Message\Message::WRONG_EVENT_CALLABLE
-     * @expectedException Phossa\Event\Exception\InvalidArgumentException
-     */
-    public function testInsert2()
-    {
-        $this->object->insert('nosuchfunction', 10);
-    }
-
-    /**
      * @covers Phossa\Event\EventQueue::remove
      */
     public function testRemove()

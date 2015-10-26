@@ -17,6 +17,7 @@ use Phossa\Event\Message\Message;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     EventManagerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -25,8 +26,8 @@ class EventManager implements EventManagerInterface
     /**
      * Events pool
      *
-     * @var     array
-     * @type    array
+     * @var     EventQueueInterface[]
+     * @type    EventQueueInterface[]
      * @access  protected
      */
     protected $events = [];

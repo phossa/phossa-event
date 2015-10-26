@@ -13,10 +13,11 @@ namespace Phossa\Event;
 use Phossa\Event\Message\Message;
 
 /**
- * Base event class
+ * Basic event class
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     EventInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */

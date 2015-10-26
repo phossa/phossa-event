@@ -13,5 +13,5 @@ if (file_exists(dirname($basedir).'/autoload.php')) {
 
 # add default namespace map
 if (isset($loader)) {
-    $loader->set('', dirname(__DIR__) . '/lib/');
+    $loader->set('', dirname(__DIR__) . '/src/');
 }

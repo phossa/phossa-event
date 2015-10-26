@@ -10,17 +10,17 @@
 
 namespace Phossa\Event;
 
-use Phossa\Event\Message\Message;
-
 /**
  * Implementation of EventQueueInterface
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     EventQueueInterface
+ * @see     \SplPriorityQueue
  * @version 1.0.0
  * @since   1.0.0 added
  */
-class EventQueue implements EventQueueInterface, \Countable
+class EventQueue implements EventQueueInterface
 {
     /**
      * the inner queue
@@ -65,35 +65,17 @@ class EventQueue implements EventQueueInterface, \Countable
      * We are not using complex priority like [ priority, PHP_MAX--]
      */
     public function insert(
-        $callable,
+        callable $callable,
         /*# int */ $priority
     ) {
-        if (!is_callable($callable)) {
-            throw new Exception\InvalidArgumentException(
-                Message::get(
-                    Message::WRONG_EVENT_CALLABLE,
-                    ''
-                ),
-                Message::WRONG_EVENT_CALLABLE
-            );
-        }
         $this->queue->insert($callable, (int) $priority);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function remove($callable)
+    public function remove(callable $callable)
     {
-        if (!is_callable($callable)) {
-            throw new Exception\InvalidArgumentException(
-                Message::get(
-                    Message::WRONG_EVENT_CALLABLE,
-                    ''
-                ),
-                Message::WRONG_EVENT_CALLABLE
-            );
-        }
         $nqueue = new \SplPriorityQueue();
         foreach($this as $p) {
             if ($p['data'] === $callable) continue;

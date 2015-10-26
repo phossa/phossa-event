@@ -23,6 +23,7 @@ namespace Phossa\Event;
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     EventManagerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -58,7 +59,7 @@ interface EventManagerAdvancedInterface extends EventManagerInterface
      * Get other managers in array [ name => $manager ]
      *
      * @param  void
-     * @return array
+     * @return EventManagerInterface[]
      * @access public
      * @api
      */

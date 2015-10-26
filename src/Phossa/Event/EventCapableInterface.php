@@ -11,9 +11,9 @@
 namespace Phossa\Event;
 
 /**
- * Make static classes event capable
+ * Make implementing class event capable
  *
- * Allow implementing static class has the ability to use events.
+ * Allow implementing classes has the ability to use events (trigger etc.)
  *
  * @interface
  * @package \Phossa\Event
@@ -21,25 +21,24 @@ namespace Phossa\Event;
  * @version 1.0.0
  * @since   1.0.0 added
  */
-interface EventCapableStaticInterface
+interface EventCapableInterface
 {
     /**
      * Setup event related stuff
      *
      * @param  EventManagerInterface $eventManager event manager object
      * @param  EventFactoryInterface $eventFactory event factory object
-     * @return void
+     * @return EventCapableInterface $this
      * @access public
-     * @static
      * @api
      */
-    public static function setEventCapable(
+    public function setEventCapable(
         EventManagerInterface $eventManager,
         EventFactoryInterface $eventFactory
-    )/*# : void */;
+    )/*# : EventCapableInterface */;
 
     /**
-     * Trigger an event to be processed by event manager
+     * Trigger an event and processed by event manager, return the event
      *
      * @param  string $eventName event name
      * @param  array $properties event property array
@@ -49,10 +48,9 @@ interface EventCapableStaticInterface
      * @throws Exception\RuntimeException
      *         exceptions from $event_manager->processEvent()
      * @access public
-     * @static
      * @api
      */
-    public static function triggerEvent(
+    public function triggerEvent(
         /*# string */ $eventName,
         array $properties = []
     )/*# : EventInterface */;

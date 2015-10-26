@@ -13,15 +13,18 @@ namespace Phossa\Event;
 use Phossa\Event\Message\Message;
 
 /**
- * Simple implementation of EventCapableStaticInterface
+ * EventCapableTrait
+ *
+ * Simple implementation of EventCapableInterface
  *
  * @trait
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     EventCapableInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
-trait EventCapableStaticTrait
+trait EventCapableTrait
 {
     /**
      * event manager
@@ -29,9 +32,8 @@ trait EventCapableStaticTrait
      * @var    EventManagerInterface
      * @type   EventManagerInterface
      * @access protected
-     * @static
      */
-    protected static $event_manager = null;
+    protected $event_manager = null;
 
     /**
      * event factory
@@ -39,33 +41,33 @@ trait EventCapableStaticTrait
      * @var    EventFactoryInterface
      * @type   EventFactoryInterface
      * @access protected
-     * @static
      */
-    protected static $event_factory = null;
+    protected $event_factory = null;
 
     /**
      * {@inheritDoc}
      */
-    public static function setEventCapable(
+    public function setEventCapable(
         EventManagerInterface $eventManager,
         EventFactoryInterface $eventFactory
-    )/*# : void */ {
-        static::$event_manager = $eventManager;
-        static::$event_factory = $eventFactory;
+    )/*# : EventCapableInterface */ {
+        $this->event_manager = $eventManager;
+        $this->event_factory = $eventFactory;
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public static function triggerEvent(
+    public function triggerEvent(
         /*# string */ $eventName,
         array $properties = []
     )/*# : EventInterface */ {
-        if (null !== static::$event_manager) {
-            return static::$event_manager->processEvent(
-                static::$event_factory->createEvent(
+        if (null !== $this->event_manager) {
+            return $this->event_manager->processEvent(
+                $this->event_factory->createEvent(
                     $eventName,
-                    get_called_class(),
+                    $this,
                     $properties
                 )
             );
@@ -73,7 +75,7 @@ trait EventCapableStaticTrait
         throw new Exception\NotFoundException(
             Message::get(
                 Message::MANAGER_NOT_FOUND,
-                get_called_class()
+                get_class()
             ),
             Message::MANAGER_NOT_FOUND
         );
