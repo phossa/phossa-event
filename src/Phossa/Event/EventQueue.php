@@ -13,9 +13,21 @@ namespace Phossa\Event;
 /**
  * Implementation of EventQueueInterface
  *
+ * Simple usage:
+ * <code>
+ *     $queue = new EventQueue();
+ *     $queue->insert($callable, 20);
+ *     foreach($queue as $c) {
+ *         $callable = $c['data'];
+ *         $priority = $c['priority'];
+ *         call_user_func($callable, ...);
+ *     }
+ *     if ($queue->count()) $queue->flush();
+ * </code>
+ *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventQueueInterface
+ * @see     Phossa\Event\EventQueueInterface
  * @see     \SplPriorityQueue
  * @version 1.0.0
  * @since   1.0.0 added
@@ -23,11 +35,11 @@ namespace Phossa\Event;
 class EventQueue implements EventQueueInterface
 {
     /**
-     * the inner queue
+     * the inner SplPriorityQueue
      *
-     * @var     SplPriorityQueue
-     * @type    SplPriorityQueue
-     * @access  protected
+     * @var    SplPriorityQueue
+     * @type   SplPriorityQueue
+     * @access protected
      */
     protected $queue;
 
@@ -52,6 +64,8 @@ class EventQueue implements EventQueueInterface
 
     /**
      * {@inheritDoc}
+     *
+     * returns ['data' => data, 'priority' => priority]
      */
     public function getIterator() {
         $nqueue = clone $this->queue;

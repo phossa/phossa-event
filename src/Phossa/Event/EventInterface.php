@@ -48,10 +48,10 @@ interface EventInterface
     /**
      * Set event context, usually an object or static class name
      *
-     * @param  mixed object or static classname
+     * @param  mixed $context object or static classname
      * @return EventInterface $this
      * @throws Exception\InvalidArgumentException
-     *         if context not an object or static class name
+     *         if context not an object or not static class name
      * @access public
      * @api
      */

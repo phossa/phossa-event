@@ -17,7 +17,7 @@ use Phossa\Event\Message\Message;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventManagerInterface
+ * @see     Phossa\Event\EventManagerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -26,9 +26,9 @@ class EventManager implements EventManagerInterface
     /**
      * Events pool
      *
-     * @var     EventQueueInterface[]
-     * @type    EventQueueInterface[]
-     * @access  protected
+     * @var    EventQueueInterface[]
+     * @type   EventQueueInterface[]
+     * @access protected
      */
     protected $events = [];
 
@@ -36,19 +36,8 @@ class EventManager implements EventManagerInterface
      * {@inheritDoc}
      */
     public function processEvent(
-        EventInterface $event
-    )/*# : EventInterface */ {
-        return $this->processEventUntil($event, function() {
-            return true;
-        });
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function processEventUntil(
         EventInterface $event,
-        callable $callback
+        callable $callback = null
     )/*# : EventInterface */ {
         $eventName = $event->getName();
 
@@ -59,31 +48,37 @@ class EventManager implements EventManagerInterface
         $queue = $this->getEventQueue($eventName);
 
         // run thru the queue
-        return $this->runEventQueueUntil($event, $queue, $callback);
+        return $this->runEventQueue($event, $queue, $callback);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function runEventQueueUntil(
+    public function runEventQueue(
         EventInterface $event,
         EventQueueInterface $queue,
-        callable $callback
+        callable $callback = null
     )/*# : EventInterface */ {
         try {
             foreach($queue as $data) {
-                $callable = $data['data'];
-                $res = call_user_func($callable, $event);
+                // execute callable from the queue
+                $res = call_user_func($data['data'], $event);
 
-                // break if stopped by $callable
+                // break if event stopped
                 if ($event->isPropagationStopped()) break;
 
                 // break if $callback return false
-                if (call_user_func($callback, $event, $res) === false) break;
+                if ($callback &&
+                    call_user_func($callback, $event, $res) === false
+                ) {
+                    break;
+                }
             }
             return $event;
 
         } catch (\Exception $e) {
+
+            // rethrow any exception caught
             throw new Exception\RuntimeException(
                 Message::get(Message::CALLABLE_RUNTIME, $e->getMessage()),
                 $e->getCode(),
@@ -227,12 +222,12 @@ class EventManager implements EventManagerInterface
         if (!$this->isListener($listener)) {
             throw new Exception\InvalidArgumentException(
                 Message::get(
-                    Message::WRONG_EVENT_LISTENER,
+                    Message::INVALID_EVENT_LISTENER,
                     is_object($listener) ?
                         get_class($listener) :
                         (string) $listener
                 ),
-                Message::WRONG_EVENT_LISTENER
+                Message::INVALID_EVENT_LISTENER
             );
         }
 
@@ -246,8 +241,9 @@ class EventManager implements EventManagerInterface
         }
 
         if ($eventName != '') {
-            foreach($evts as $e => $arr) {
-                if ($e != $eventName) unset($evts[$e]);
+            $names = array_keys($evts);
+            foreach($names as $n) {
+                if ($n !== $eventName) unset($evts[$n]);
             }
         }
 
@@ -330,8 +326,8 @@ class EventManager implements EventManagerInterface
 
         if (empty($xc)) {
             throw new Exception\InvalidArgumentException(
-                Message::get(Message::WRONG_EVENT_CALLABLE, $eventName),
-                Message::WRONG_EVENT_CALLABLE
+                Message::get(Message::INVALID_EVENT_CALLABLE, $eventName),
+                Message::INVALID_EVENT_CALLABLE
             );
         } else {
             foreach($xc as $c) {
@@ -367,8 +363,8 @@ class EventManager implements EventManagerInterface
 
         if (empty($xc)) {
             throw new Exception\InvalidArgumentException(
-                Message::get(Message::WRONG_EVENT_CALLABLE, $eventName),
-                Message::WRONG_EVENT_CALLABLE
+                Message::get(Message::INVALID_EVENT_CALLABLE, $eventName),
+                Message::INVALID_EVENT_CALLABLE
             );
         } else {
             foreach($xc as $c) {

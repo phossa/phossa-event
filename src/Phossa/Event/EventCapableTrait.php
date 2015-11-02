@@ -20,7 +20,7 @@ use Phossa\Event\Message\Message;
  * @trait
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventCapableInterface
+ * @see     Phossa\Event\EventCapableInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -33,23 +33,23 @@ trait EventCapableTrait
      * @type   EventManagerInterface
      * @access protected
      */
-    protected $event_manager = null;
+    protected $event_manager;
 
     /**
      * event factory
      *
-     * @var    EventFactoryInterface
-     * @type   EventFactoryInterface
+     * @var    callable
+     * @type   callable
      * @access protected
      */
-    protected $event_factory = null;
+    protected $event_factory;
 
     /**
      * {@inheritDoc}
      */
-    public function setEventCapable(
+    public function setEventManager(
         EventManagerInterface $eventManager,
-        EventFactoryInterface $eventFactory
+        callable $eventFactory = null
     )/*# : EventCapableInterface */ {
         $this->event_manager = $eventManager;
         $this->event_factory = $eventFactory;
@@ -64,13 +64,17 @@ trait EventCapableTrait
         array $properties = []
     )/*# : EventInterface */ {
         if (null !== $this->event_manager) {
-            return $this->event_manager->processEvent(
-                $this->event_factory->createEvent(
+            if ($this->event_factory) {
+                $evt = call_user_func(
+                    $this->event_factory,
                     $eventName,
                     $this,
                     $properties
-                )
-            );
+                );
+            } else {
+                $evt = new Event($eventName, $this, $properties);
+            }
+            return $this->event_manager->processEvent($evt);
         }
         throw new Exception\NotFoundException(
             Message::get(

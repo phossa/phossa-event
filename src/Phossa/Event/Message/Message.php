@@ -17,54 +17,56 @@ use Phossa\Shared\Message\MessageAbstract;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Shared\Message\MessageAbstract
  * @version 1.0.0
  * @since   1.0.0 added
  */
 class Message extends MessageAbstract
 {
     /**#@+
+     * @var   int
      * @type  int
      */
 
     /**
-     * Event property not found
+     * Event "%s" has no property "%s"
      */
     const PROPERTY_NOT_FOUND    = 1510101158;
 
     /**
-     * Event manager not found
+     * Event manager not set yet in "%s"
      */
     const MANAGER_NOT_FOUND     = 1510101159;
 
     /**
-     * Wrong event context
+     * Invalid event context for "%s"
      */
-    const WRONG_EVENT_TARGET    = 1510101200;
+    const INVALID_EVENT_CONTEXT = 1510101200;
 
     /**
-     * Wrong event listener
+     * "%s" is not a event listener
      */
-    const WRONG_EVENT_LISTENER  = 1510101201;
+    const INVALID_EVENT_LISTENER= 1510101201;
 
     /**
-     * Wrong event callable
+     * Invalid event callable for "%s"
      */
-    const WRONG_EVENT_CALLABLE  = 1510101202;
+    const INVALID_EVENT_CALLABLE= 1510101202;
 
     /**
-     * Callables not found for event
+     * Callables not found for event "%s"
      */
     const CALLABLE_NOT_FOUND    = 1510101203;
 
     /**
-     * Callables runtime exception
+     * Callable runtime exception: %s'
      */
     const CALLABLE_RUNTIME      = 1510101204;
 
     /**
-     * Wrong event name
+     * Invalid event name found
      */
-    const WRONG_EVENT_NAME      = 1510101205;
+    const INVALID_EVENT_NAME    = 1510101205;
 
     /**#@-*/
 
@@ -72,13 +74,13 @@ class Message extends MessageAbstract
      * {@inheritDoc}
      */
     protected static $messages = [
-        self::PROPERTY_NOT_FOUND    => 'Event "%s" has no property "%s"',
-        self::MANAGER_NOT_FOUND     => 'Event manager not set yet in "%s"',
-        self::WRONG_EVENT_TARGET    => 'Wrong event context for "%s"',
-        self::WRONG_EVENT_LISTENER  => '"%s" is not a event listener',
-        self::WRONG_EVENT_CALLABLE  => 'Wrong event callable for "%s"',
-        self::CALLABLE_NOT_FOUND    => 'Callables not found for event "%s"',
-        self::CALLABLE_RUNTIME      => 'Callable runtime exception: %s',
-        self::WRONG_EVENT_NAME      => 'Wrong event name found',
+        self::PROPERTY_NOT_FOUND        => 'Event "%s" has no property "%s"',
+        self::MANAGER_NOT_FOUND         => 'Event manager not set yet in "%s"',
+        self::INVALID_EVENT_CONTEXT     => 'Invalid event context for "%s"',
+        self::INVALID_EVENT_LISTENER    => '"%s" is not a event listener',
+        self::INVALID_EVENT_CALLABLE    => 'Invalid event callable for "%s"',
+        self::CALLABLE_NOT_FOUND        => 'Callables not found for event "%s"',
+        self::CALLABLE_RUNTIME          => 'Callable runtime exception: %s',
+        self::INVALID_EVENT_NAME        => 'Invalid event name found',
     ];
 }

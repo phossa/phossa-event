@@ -66,7 +66,7 @@ class EventTest
 
     /**
      * @covers Phossa\Event\Event::setContext
-     * @expectedExceptionCode Phossa\Event\Message\Message::WRONG_EVENT_TARGET
+     * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_CONTEXT
      * @expectedException Phossa\Event\Exception\InvalidArgumentException
      */
     public function testSetContext2()

@@ -1,5 +1,6 @@
 # Introduction
-Phossa is a lightweight PHP framework. Phossa-event is the event package of this framework.
+Phossa is a lightweight PHP framework. Phossa-event is the event management
+package of this framework.
 
 # Features
 - Support PHP 5.4.
@@ -11,3 +12,4 @@ Phossa is a lightweight PHP framework. Phossa-event is the event package of this
 
 # Dependencies
 PHP >= 5.4.0
+phossa-shared >= 1.0.0

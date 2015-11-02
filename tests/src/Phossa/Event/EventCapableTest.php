@@ -34,9 +34,8 @@ class EventCapableTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetEventCapable()
     {
-        $this->object->setEventCapable(
-            new EventManager(),
-            new EventFactory()
+        $this->object->setEventManager(
+            new EventManager()
         );
     }
 
@@ -51,9 +50,11 @@ class EventCapableTest extends \PHPUnit_Framework_TestCase
         $manager->attachListener(new Listener());
         $manager->attachListener('Phossa\\Event\\ListenerStatic');
 
-        $this->object->setEventCapable(
+        $this->object->setEventManager(
             $manager,
-            new EventFactory()
+            function($e, $c, $p) {
+                return new Event($e, $c, $p);
+            }
         );
 
         $e1 = $this->object->triggerEvent('evtTest4');

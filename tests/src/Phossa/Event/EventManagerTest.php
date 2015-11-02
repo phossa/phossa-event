@@ -76,16 +76,16 @@ class EventManagerTest
     }
 
     /**
-     * @covers Phossa\Event\EventManager::processEventUntil
+     * @covers Phossa\Event\EventManager::processEvent
      */
-    public function testProcessEventUntil()
+    public function testProcessEvent3()
     {
         $l = new Listener();
         $this->object->attachListener($l);
 
         // normal
         $e1 = new Event('evtTest3', $this);
-        $e1 = $this->object->processEventUntil($e1, function() {
+        $e1 = $this->object->processEvent($e1, function() {
             return true;
         });
         $this->assertArrayHasKey(
@@ -97,7 +97,7 @@ class EventManagerTest
 
         // stopped by callback
         $e2 = new Event('evtTest3', $this);
-        $e2 = $this->object->processEventUntil($e2, function() {
+        $e2 = $this->object->processEvent($e2, function() {
             return false;
         });
         $this->assertArrayHasKey(
@@ -121,7 +121,7 @@ class EventManagerTest
     /**
      * @covers Phossa\Event\EventManager::attachListener
      * @expectedException Phossa\Event\Exception\InvalidArgumentException
-     * @expectedExceptionCode Phossa\Event\Message\Message::WRONG_EVENT_LISTENER
+     * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_LISTENER
      */
     public function testAttachListener2()
     {
@@ -160,7 +160,7 @@ class EventManagerTest
     /**
      * @covers Phossa\Event\EventManager::detachListener
      * @expectedException Phossa\Event\Exception\InvalidArgumentException
-     * @expectedExceptionCode Phossa\Event\Message\Message::WRONG_EVENT_LISTENER
+     * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_LISTENER
      */
     public function testDetachListener2()
     {

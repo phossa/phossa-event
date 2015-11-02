@@ -18,7 +18,7 @@ use Phossa\Event\Message\Message;
  * @trait
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventCapableStaticInterface
+ * @see     Phossa\Event\EventCapableStaticInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -35,7 +35,7 @@ trait EventCapableStaticTrait
      * @access protected
      * @static
      */
-    protected static $event_manager = null;
+    protected static $event_manager;
 
     /**
      * event factory
@@ -43,19 +43,19 @@ trait EventCapableStaticTrait
      * each descendant classes of class using this trait may define its
      * own copy of protected event factory.
      *
-     * @var    EventFactoryInterface
-     * @type   EventFactoryInterface
+     * @var    callable
+     * @type   callable
      * @access protected
      * @static
      */
-    protected static $event_factory = null;
+    protected static $event_factory;
 
     /**
      * {@inheritDoc}
      */
-    public static function setEventCapable(
+    public static function setEventManager(
         EventManagerInterface $eventManager,
-        EventFactoryInterface $eventFactory
+        callable $eventFactory = null
     )/*# : void */ {
         static::$event_manager = $eventManager;
         static::$event_factory = $eventFactory;
@@ -69,13 +69,17 @@ trait EventCapableStaticTrait
         array $properties = []
     )/*# : EventInterface */ {
         if (null !== static::$event_manager) {
-            return static::$event_manager->processEvent(
-                static::$event_factory->createEvent(
+            if (static::$event_factory) {
+                $evt = call_user_func(
+                    static::$event_factory,
                     $eventName,
                     get_called_class(),
                     $properties
-                )
-            );
+                );
+            } else {
+                $evt = new Event($eventName, get_called_class(), $properties);
+            }
+            return static::$event_manager->processEvent($evt);
         }
         throw new Exception\NotFoundException(
             Message::get(

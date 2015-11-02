@@ -63,10 +63,9 @@ class EventManagerAdvancedTest
     }
 
     /**
-     * @covers Phossa\Event\EventManagerAdvanced::processEventUntil
-     * @todo   Implement testProcessEventUntil().
+     * @covers Phossa\Event\EventManagerAdvanced::processEvent
      */
-    public function testProcessEventUntil()
+    public function testProcessEvent()
     {
         $l = new Listener();
 
@@ -77,7 +76,7 @@ class EventManagerAdvancedTest
 
         // trigger event by $this manager
         $evt = new Event('evtTest4', $this);
-        $evt = $this->object->processEventUntil($evt, function() {
+        $evt = $this->object->processEvent($evt, function() {
             return true;
         });
 

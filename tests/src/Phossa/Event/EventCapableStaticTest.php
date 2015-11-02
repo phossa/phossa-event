@@ -28,11 +28,23 @@ class EventCapableStaticTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Phossa\Event\EventCapable::setEventCapable
      */
-    public function testSetEventCapable()
+    public function testSetEventCapable1()
     {
-        EventCapableStatic::setEventCapable(
+        EventCapableStatic::setEventManager(
+            new EventManager()
+        );
+    }
+
+    /**
+     * @covers Phossa\Event\EventCapable::setEventCapable
+     */
+    public function testSetEventCapable2()
+    {
+        EventCapableStatic::setEventManager(
             new EventManager(),
-            new EventFactory()
+            function($e, $c, $p) {
+                return new Event($e, $c, $p);
+            }
         );
     }
 
@@ -47,10 +59,7 @@ class EventCapableStaticTest extends \PHPUnit_Framework_TestCase
         $manager->attachListener(new Listener());
         $manager->attachListener('Phossa\\Event\\ListenerStatic');
 
-        EventCapableStatic::setEventCapable(
-            $manager,
-            new EventFactory()
-        );
+        EventCapableStatic::setEventManager($manager);
 
         $e1 = EventCapableStatic::triggerEvent('evtTest4');
         $this->assertArrayHasKey('testY', $e1->getProperties());

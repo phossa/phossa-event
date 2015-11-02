@@ -13,17 +13,19 @@ namespace Phossa\Event;
 /**
  * Provides advanced features other than EventManagerInterface
  *
- * - Set extra managers such as global or shared managers, and able to trigger
+ * - Set extra managers, such as global or shared managers, and able to trigger
  *   callables in these managers in the event.
  *
  * - Able to globbing names, such as 'login.attempt' event will also triggers
  *   callables registered under 'login.*' event name and also triggers those
  *   registered under '*'
  *
+ * - Not able to recursively trigger extra managers' extra managers !
+ *
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventManagerInterface
+ * @see     Phossa\Event\EventManagerInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -32,7 +34,7 @@ interface EventManagerAdvancedInterface extends EventManagerInterface
     /**
      * Set extra event managers, global, shared, peer etc.
      *
-     * @param  string $name name for this manager
+     * @param  string $name unique name for this manager
      * @param  EventManagerInterface $manager
      * @return void
      * @access public
@@ -66,7 +68,9 @@ interface EventManagerAdvancedInterface extends EventManagerInterface
     public function getOtherManagers()/*# : array */;
 
     /**
-     * Match proper event queue, including queues with globbing event names
+     * Match proper event queue
+     *
+     * Including queues with globbing event names
      *
      * @param  string $eventName event name to match
      * @param  EventManager $manager which manager to look at

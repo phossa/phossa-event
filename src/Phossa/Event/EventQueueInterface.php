@@ -60,9 +60,9 @@ interface EventQueueInterface extends \IteratorAggregate, \Countable
     public function flush();
 
     /**
-     * Combine with an event queue
+     * Combine self with another event queue
      *
-     * return the new event queue, self is not changed
+     * return the result event queue, self is not changed
      *
      * @param  EventQueueInterface $queue
      * @return EventQueueInterface the new event queue

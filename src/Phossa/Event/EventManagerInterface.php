@@ -13,8 +13,8 @@ namespace Phossa\Event;
 /**
  * EventManager Interface
  *
- * No restrictions will be applied on the event manager. maybe a singleton,
- * maybe a local event manager, maybe subprocess event manager whatever...
+ * No restrictions will be forced upon the event manager yet. It can be a
+ * singleton, a local event manager, or a child process event manager ...
  *
  * @interface
  * @package \Phossa\Event
@@ -25,13 +25,17 @@ namespace Phossa\Event;
 interface EventManagerInterface
 {
     /**
-     * Fire up an event and processed by listeners
+     * Fire up an event and process it by listeners
      *
-     * Retrieve all the callables attached to this event FROM THIS MANAGER and
-     * execute them in order. Return the event if queue ends or event is
-     * stopped.
+     * Retrieve all the callables attached to this event from THIS MANAGER and
+     * execute them in order. Return the event if ends OR event is stopped OR
+     * the optional $callback returns false.
+     *
+     * The $callback defined as `function($event, $response) {}`, where
+     * $reponse is the return value from previous event handler.
      *
      * @param  EventInterface $event the event
+     * @param  callable $callback (optional) a callback returns bool
      * @return EventInterface
      * @throws Exception\RuntimeException
      *         rethrow any exception catched as RuntimeException
@@ -39,48 +43,29 @@ interface EventManagerInterface
      * @api
      */
     public function processEvent(
-        EventInterface $event
-    )/*# : EventInterface */;
-
-    /**
-     * Fire up an event and processed by listeners until callback returns false
-     *
-     * Retrieve all the callables attached to this event FROM THIS MANAGER and
-     * execute them in order. Return the event if queue ends or event is
-     * stopped or the callback returns false
-     *
-     * @param  EventInterface $event the event
-     * @param  callable $callback a callback returns bool
-     * @return EventInterface
-     * @throws Exception\RuntimeException
-     *         rethrow any exception catched as RuntimeException
-     * @access public
-     * @api
-     */
-    public function processEventUntil(
         EventInterface $event,
-        callable $callback
+        callable $callback = null
     )/*# : EventInterface */;
 
     /**
-     * Run an event with the provided queue until callback returns false
+     * Run an event with the provided queue
      *
-     * The $callback defined as function($event, $response) {}, where
+     * The $callback defined as `function($event, $response) {}`, where
      * $reponse is the return value from previous event handler.
      *
      * @param  EventInterface $event
      * @param  EventQueueInterface $queue
-     * @param  callable $callback a callback returns bool
+     * @param  callable $callback (optional) a callback returns bool
      * @return EventInterface
      * @throws Exception\RuntimeException
      *         rethrow any exception catched as RuntimeException
      * @access public
      * @api
      */
-    public function runEventQueueUntil(
+    public function runEventQueue(
         EventInterface $event,
         EventQueueInterface $queue,
-        callable $callback
+        callable $callback = null
     )/*# : EventInterface */;
 
     /**
@@ -118,7 +103,9 @@ interface EventManagerInterface
     )/*# : EventManagerInterface */;
 
     /**
-     * Check event queue for $eventName, returns true if exists and not empty
+     * Check event queue for $eventName
+     *
+     * returns true if exists AND not empty
      *
      * @param  string $eventName the event name
      * @return bool
@@ -158,7 +145,7 @@ interface EventManagerInterface
      * Get all event names in an array
      *
      * @param  void
-     * @return array
+     * @return string[]
      * @access public
      * @api
      */

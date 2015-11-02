@@ -15,9 +15,15 @@ use Phossa\Event\Message\Message;
 /**
  * Basic event class
  *
+ * Simple usage:
+ * <code>
+ *     $evt = new Event('login.attempt', $this, ['username' => 'phossa']);
+ *     $evt->stopPropagation();
+ * </code>
+ *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventInterface
+ * @see     Phossa\Event\EventInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -30,18 +36,18 @@ class Event implements EventInterface
      * @type   string
      * @access protected
      */
-    protected $name = '';
+    protected $name;
 
     /**
      * event context
      *
-     * it is an object or string (static class name)
+     * an object OR static class name (string)
      *
      * @var    mixed
      * @type   mixed
      * @access protecteds
      */
-    protected $context = null;
+    protected $context;
 
     /**
      * event properties
@@ -50,7 +56,7 @@ class Event implements EventInterface
      * @type   array
      * @access protected
      */
-    protected $properties = [];
+    protected $properties;
 
     /**
      * stop propagation
@@ -66,9 +72,9 @@ class Event implements EventInterface
      *
      * @param  string $eventName event name
      * @param  mixed $context event context, object or static class name
-     * @param  array $properties event properties
+     * @param  array $properties (optional) event properties
      * @throws Exception\InvalidArgumentException
-     *         if $eventName empty or $context is not the right context type
+     *         if $eventName empty or $context is not the right type
      * @access public
      * @api
      */
@@ -88,12 +94,12 @@ class Event implements EventInterface
     public function setName(
         /*# string */ $eventName
     )/*# : EventInterface */ {
-        if (!is_string($eventName) || $eventName === '') {
+        if (!is_string($eventName) || trim($eventName) === '') {
             throw new Exception\InvalidArgumentException(
                 Message::get(
-                    Message::WRONG_EVENT_NAME
+                    Message::INVALID_EVENT_NAME
                 ),
-                Message::WRONG_EVENT_NAME
+                Message::INVALID_EVENT_NAME
             );
         }
         $this->name = trim($eventName);
@@ -119,10 +125,10 @@ class Event implements EventInterface
         }
         throw new Exception\InvalidArgumentException(
             Message::get(
-                Message::WRONG_EVENT_TARGET,
+                Message::INVALID_EVENT_CONTEXT,
                 $this->getName()
             ),
-            Message::WRONG_EVENT_TARGET
+            Message::INVALID_EVENT_CONTEXT
         );
     }
 

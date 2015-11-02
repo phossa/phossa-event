@@ -15,8 +15,8 @@ namespace Phossa\Event;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     EventManager
- * @see     EventManagerAdvancedInterface
+ * @see     Phossa\Event\EventManager
+ * @see     Phossa\Event\EventManagerAdvancedInterface
  * @version 1.0.0
  * @since   1.0.0 added
  */
@@ -62,9 +62,9 @@ class EventManagerAdvanced extends EventManager implements
     /**
      * {@inheritDoc}
      */
-    public function processEventUntil(
+    public function processEvent(
         EventInterface $event,
-        callable $callback
+        callable $callback = null
     )/*# : EventInterface */ {
         $eventName = $event->getName();
 
@@ -73,17 +73,19 @@ class EventManagerAdvanced extends EventManager implements
 
         // other managers
         $managers = $this->getOtherManagers();
-        foreach($managers as $n => $m) {
+        foreach($managers as $m) {
             $q = $this->matchEventQueue($eventName, $m);
             if ($q->count()) $queue->combine($q);
         }
 
         // run thru the queue
-        return $this->runEventQueueUntil($event, $queue, $callback);
+        return $this->runEventQueue($event, $queue, $callback);
     }
 
     /**
-     * Match proper event queue, including queues with globbing event names
+     * Match proper event queue
+     *
+     * Including queues with globbing event names
      *
      * @param  string $eventName event name to match
      * @param  EventManager $manager which manager to look at

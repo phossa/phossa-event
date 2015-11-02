@@ -15,6 +15,7 @@ namespace Phossa\Event\Exception;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
+ * @see     Phossa\Shared\Exception\RuntimeException
  * @version 1.0.0
  * @since   1.0.0 added
  */

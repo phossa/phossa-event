@@ -26,29 +26,45 @@ interface EventCapableStaticInterface
     /**
      * Setup event related stuff
      *
+     * Inject the event manager object. also, if using a different event class
+     * other than the 'Phossa\Event\Event', user may pass a callable which
+     * takes same arguments as the 'Event' class, to create event object.
+     *
+     * <code>
+     *     MyClass::setEventManager(
+     *         $evtManager,
+     *         function($evtName, $context, $properties) {
+     *             return new MyEvent($evtName, $context, $properties);
+     *         }
+     *     );
+     * </code>
+     *
      * @param  EventManagerInterface $eventManager event manager object
-     * @param  EventFactoryInterface $eventFactory event factory object
+     * @param  callable $eventFactory (optional) event factory callback
      * @return void
+     * @see    Phossa\Event\EventManager
+     * @see    Phossa\Event\Event
      * @access public
      * @static
      * @api
      */
-    public static function setEventCapable(
+    public static function setEventManager(
         EventManagerInterface $eventManager,
-        EventFactoryInterface $eventFactory
+        callable $eventFactory = null
     )/*# : void */;
 
     /**
-     * Trigger an event and processed by event manager, return the event
+     * Trigger an event and processed it by event manager, return the event
      *
      * @param  string $eventName event name
-     * @param  array $properties event property array
+     * @param  array $properties (optional) event property array
      * @return EventInterface
      * @throws Exception\NotFoundException
      *         if event manager not set yet
      * @throws Exception\RuntimeException
      *         exceptions from $event_manager->processEvent()
      * @access public
+     * @see    Phossa\Event\EventManager::processEvent()
      * @static
      * @api
      */
