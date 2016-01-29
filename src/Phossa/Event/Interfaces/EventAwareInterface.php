@@ -8,20 +8,20 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa\Event;
+namespace Phossa\Event\Interfaces;
 
 /**
- * Make implementing class event capable
+ * Make implementing class event aware or capable
  *
  * Allow implementing classes has the ability to use events (trigger etc.)
  *
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
  */
-interface EventCapableInterface
+interface EventAwareInterface
 {
     /**
      * Setup event related stuff
@@ -41,16 +41,15 @@ interface EventCapableInterface
      *
      * @param  EventManagerInterface $eventManager event manager object
      * @param  callable $eventFactory (optional) event factory callback
-     * @return EventCapableInterface $this
-     * @see    Phossa\Event\EventManager
-     * @see    Phossa\Event\Event
+     * @return this
+     * @see    \Phossa\Event\Interfaces\EventManagerInterface
      * @access public
      * @api
      */
     public function setEventManager(
         EventManagerInterface $eventManager,
         callable $eventFactory = null
-    )/*# : EventCapableInterface */;
+    )/*# : EventAwareInterface */;
 
     /**
      * Trigger an event and processed it by event manager, return the event
@@ -58,11 +57,11 @@ interface EventCapableInterface
      * @param  string $eventName event name
      * @param  array $properties (optional) event property array
      * @return EventInterface
-     * @throws Exception\NotFoundException
+     * @throws \Phossa\Event\Exception\NotFoundException
      *         if event manager not set yet
-     * @throws Exception\RuntimeException
+     * @throws \Phossa\Event\Exception\RuntimeException
      *         exceptions from $event_manager->processEvent()
-     * @see    Phossa\Event\EventManager::processEvent()
+     * @see    \Phossa\Event\EventManager::processEvent()
      * @access public
      * @api
      */

@@ -11,17 +11,17 @@
 namespace Phossa\Event\Exception;
 
 /**
- * RuntimeException for \Phossa\Event
+ * LogicException for \Phossa\Event
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Exception\ExceptionInterface
- * @see     \Phossa\Shared\Exception\RuntimeException
+ * @see     \Phossa\Shared\Exception\LogicException
  * @version 1.0.0
  * @since   1.0.0 added
  */
-class RuntimeException
-    extends \Phossa\Shared\Exception\RuntimeException
+class LogicException
+    extends \Phossa\Shared\Exception\LogicException
     implements ExceptionInterface
 {
 

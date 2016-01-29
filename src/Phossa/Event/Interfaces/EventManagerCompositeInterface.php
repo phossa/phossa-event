@@ -8,7 +8,7 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa\Event;
+namespace Phossa\Event\Interfaces;
 
 /**
  * Provides advanced features other than EventManagerInterface
@@ -16,46 +16,43 @@ namespace Phossa\Event;
  * - Set extra managers, such as global or shared managers, and able to trigger
  *   callables in these managers in the event.
  *
- * - Able to globbing names, such as 'login.attempt' event will also triggers
- *   callables registered under 'login.*' event name and also triggers those
- *   registered under '*'
- *
  * - Not able to recursively trigger extra managers' extra managers !
  *
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Event\EventManagerInterface
- * @version 1.0.0
+ * @version 1.0.2
  * @since   1.0.0 added
  */
-interface EventManagerAdvancedInterface extends EventManagerInterface
+interface EventManagerCompositeInterface
 {
     /**
      * Set extra event managers, global, shared, peer etc.
      *
      * @param  string $name unique name for this manager
      * @param  EventManagerInterface $manager
-     * @return void
+     * @return this
+     * @throws \Phossa\Event\Exception\InvalidArgumentException
+     *         if $manager is also EventManagerCompositeInterface
      * @access public
      * @api
      */
     public function setOtherManager(
         /*# string */ $name,
         EventManagerInterface $manager
-    );
+    )/*# : EventManagerCompositeInterface */;
 
     /**
      * Unset extra manager
      *
      * @param  string $name manager name (id)
-     * @return void
+     * @return this
      * @access public
      * @api
      */
     public function unsetOtherManager(
         /*# string */ $name
-    );
+    )/*# : EventManagerCompositeInterface */;
 
     /**
      * Get other managers in array [ name => $manager ]
@@ -66,21 +63,4 @@ interface EventManagerAdvancedInterface extends EventManagerInterface
      * @api
      */
     public function getOtherManagers()/*# : array */;
-
-    /**
-     * Match proper event queue
-     *
-     * Including queues with globbing event names
-     *
-     * @param  string $eventName event name to match
-     * @param  EventManager $manager which manager to look at
-     * @return EventQueueInterface
-     * @throws void
-     * @access public
-     * @api
-     */
-    public function matchEventQueue(
-        /*# string */ $eventName,
-        EventManagerInterface $manager
-    )/*# : EventQueueInterface */;
 }

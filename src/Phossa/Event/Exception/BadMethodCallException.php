@@ -11,17 +11,17 @@
 namespace Phossa\Event\Exception;
 
 /**
- * RuntimeException for \Phossa\Event
+ * BadMethodCallException for \Phossa\Event
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Exception\ExceptionInterface
- * @see     \Phossa\Shared\Exception\RuntimeException
+ * @see     \Phossa\Shared\Exception\BadMethodCallException
  * @version 1.0.0
  * @since   1.0.0 added
  */
-class RuntimeException
-    extends \Phossa\Shared\Exception\RuntimeException
+class BadMethodCallException
+    extends \Phossa\Shared\Exception\BadMethodCallException
     implements ExceptionInterface
 {
 

@@ -2,12 +2,19 @@
 
 namespace Phossa\Event;
 
+use Phossa\Event\Interfaces\EventListenerInterface;
+
 class Listener implements EventListenerInterface
 {
+    /*
+     * able to execute all methods defined in getEventsListening()
+     */
     public function __call($name, $arguments) {
         /* @var $evt EventInterface */
         $evt = $arguments[0];
         $evt->setProperty($name, $name);
+
+        // stop event propagation after 'testY'
         if ($name == 'testY') $evt->stopPropagation();
     }
 

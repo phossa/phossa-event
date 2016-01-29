@@ -8,7 +8,6 @@ namespace Phossa\Event;
 class EventTest
     extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var Event
      */
@@ -33,6 +32,18 @@ class EventTest
     }
 
     /**
+     * @covers Phossa\Event\Event::__invoke()
+     */
+    public function testInvoke()
+    {
+        $evt = new Event('prototype');
+        $evt('newEvent', $this->object, ['bingo', 'a' => 'c']);
+        $this->assertTrue('newEvent' === $evt->getName());
+        $this->assertTrue($this->object === $evt->getContext());
+        $this->assertEquals(['bingo', 'a' => 'c'], $evt->getProperties());
+    }
+
+    /**
      * @covers Phossa\Event\Event::setName
      */
     public function testSetName()
@@ -43,13 +54,39 @@ class EventTest
     }
 
     /**
+     * set empty name
+     *
+     * @covers Phossa\Event\Event::setName
+     * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_NAME
+     * @expectedException Phossa\Event\Exception\InvalidArgumentException
+     */
+    public function testSetName2()
+    {
+        $newname = '';
+        $this->object->setName($newname);
+        $this->assertTrue($newname === $this->object->getName());
+    }
+
+    /**
+     * set non-string name
+     *
+     * @covers Phossa\Event\Event::setName
+     * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_NAME
+     * @expectedException Phossa\Event\Exception\InvalidArgumentException
+     */
+    public function testSetName3()
+    {
+        $newname = 100;
+        $this->object->setName($newname);
+        $this->assertTrue($newname === $this->object->getName());
+    }
+
+    /**
      * @covers Phossa\Event\Event::getName
      */
     public function testGetName()
     {
-        $newname = 'newname';
-        $this->object->setName($newname);
-        $this->assertTrue($newname === $this->object->getName());
+        $this->assertTrue('test' === $this->object->getName());
     }
 
     /**
@@ -57,14 +94,22 @@ class EventTest
      */
     public function testSetContext1()
     {
-        // test object
+        // context is an object
         $this->assertTrue($this === $this->object->getContext());
 
-        // test class name
+        // set context to class name
         $this->object->setContext(get_class($this->object));
+
+        // test class
+        $this->assertEquals(
+            get_class($this->object),
+            $this->object->getContext()
+        );
     }
 
     /**
+     * set context to a non-exist class name
+     *
      * @covers Phossa\Event\Event::setContext
      * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_CONTEXT
      * @expectedException Phossa\Event\Exception\InvalidArgumentException
@@ -80,7 +125,9 @@ class EventTest
     public function testGetContext()
     {
         $this->object->setContext(get_class($this->object));
-        $this->assertTrue(get_class($this->object) === $this->object->getContext());
+        $this->assertTrue(
+            get_class($this->object) === $this->object->getContext()
+        );
     }
 
     /**
@@ -89,6 +136,15 @@ class EventTest
     public function testHasProperty()
     {
         $this->assertTrue($this->object->hasProperty('invoker'));
+    }
+
+
+    /**
+     * @covers Phossa\Event\Event::hasProperty
+     */
+    public function testHasProperty2()
+    {
+        $this->assertFalse($this->object->hasProperty(10));
     }
 
     /**
@@ -100,6 +156,8 @@ class EventTest
     }
 
     /**
+     * non-existing property
+     *
      * @covers Phossa\Event\Event::getProperty
      * @expectedExceptionCode Phossa\Event\Message\Message::PROPERTY_NOT_FOUND
      * @expectedException Phossa\Event\Exception\NotFoundException
@@ -110,12 +168,46 @@ class EventTest
     }
 
     /**
+     * non-string property name
+     *
+     * @covers Phossa\Event\Event::getProperty
+     * @expectedExceptionCode Phossa\Event\Message\Message::PROPERTY_NOT_FOUND
+     * @expectedException Phossa\Event\Exception\NotFoundException
+     */
+    public function testGetProperty3()
+    {
+        $this->assertTrue($this === $this->object->getProperty(10));
+    }
+
+    /**
      * @covers Phossa\Event\Event::setProperty
      */
     public function testSetProperty()
     {
         $this->object->setProperty('wow', 'bingo');
         $this->assertTrue('bingo' === $this->object->getProperty('wow'));
+    }
+
+    /**
+     * property name is int, OK
+     *
+     * @covers Phossa\Event\Event::setProperty
+     */
+    public function testSetProperty1()
+    {
+        $this->object->setProperty(10, 'bingo');
+    }
+
+    /**
+     * property name is not a scalar
+     *
+     * @covers Phossa\Event\Event::setProperty
+     * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_PROPERTY
+     * @expectedException Phossa\Event\Exception\InvalidArgumentException
+     */
+    public function testSetProperty2()
+    {
+        $this->object->setProperty(new \Exception(), 'bingo');
     }
 
     /**
@@ -129,13 +221,28 @@ class EventTest
 
     /**
      * @covers Phossa\Event\Event::setProperties
-     * @todo   Implement testSetProperties().
      */
     public function testSetProperties()
     {
         $a = ['a' => 'aa', 'b' => 'bb'];
         $this->object->setProperties($a);
         $this->assertTrue($a === $this->object->getProperties());
+    }
+
+    /**
+     * @covers Phossa\Event\Event::setResults
+     * @covers Phossa\Event\Event::getResults
+     */
+    public function testSetResults()
+    {
+        $this->object->setResults('bingo');
+        $this->assertEquals(['bingo'], $this->object->getResults());
+
+        $this->object->setResults('bingo', 'wow');
+        $this->assertEquals(
+            ['bingo', 'wow' => 'bingo'],
+            $this->object->getResults()
+        );
     }
 
     /**
@@ -157,5 +264,4 @@ class EventTest
         $this->object->stopPropagation();
         $this->assertTrue(true === $this->object->isPropagationStopped());
     }
-
 }

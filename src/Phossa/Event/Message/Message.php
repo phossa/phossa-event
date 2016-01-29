@@ -17,19 +17,18 @@ use Phossa\Shared\Message\MessageAbstract;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Shared\Message\MessageAbstract
- * @version 1.0.0
+ * @see     \Phossa\Shared\Message\MessageAbstract
+ * @version 1.0.1
  * @since   1.0.0 added
  */
 class Message extends MessageAbstract
 {
     /**#@+
      * @var   int
-     * @type  int
      */
 
     /**
-     * Event "%s" has no property "%s"
+     * "%s" has no property "%s"
      */
     const PROPERTY_NOT_FOUND    = 1510101158;
 
@@ -64,9 +63,29 @@ class Message extends MessageAbstract
     const CALLABLE_RUNTIME      = 1510101204;
 
     /**
-     * Invalid event name found
+     * Invalid event name "%s" found
      */
     const INVALID_EVENT_NAME    = 1510101205;
+
+    /**
+     * Invalid event property "%s"
+     */
+    const INVALID_EVENT_PROPERTY= 1510101206;
+
+    /**
+     * Invalid event manager type "%s"
+     */
+    const INVALID_EVENT_MANAGER = 1510101207;
+
+    /**
+     * Immutable method "%s" called
+     */
+    const IMMUTABLE_EVENT_METHOD= 1510101208;
+
+    /**
+     * "%s" has no method "%s"
+     */
+    const METHOD_NOT_FOUND      = 1510101209;
 
     /**#@-*/
 
@@ -74,13 +93,17 @@ class Message extends MessageAbstract
      * {@inheritDoc}
      */
     protected static $messages = [
-        self::PROPERTY_NOT_FOUND        => 'Event "%s" has no property "%s"',
+        self::PROPERTY_NOT_FOUND        => '"%s" has no property "%s"',
         self::MANAGER_NOT_FOUND         => 'Event manager not set yet in "%s"',
         self::INVALID_EVENT_CONTEXT     => 'Invalid event context for "%s"',
         self::INVALID_EVENT_LISTENER    => '"%s" is not a event listener',
         self::INVALID_EVENT_CALLABLE    => 'Invalid event callable for "%s"',
         self::CALLABLE_NOT_FOUND        => 'Callables not found for event "%s"',
         self::CALLABLE_RUNTIME          => 'Callable runtime exception: %s',
-        self::INVALID_EVENT_NAME        => 'Invalid event name found',
+        self::INVALID_EVENT_NAME        => 'Invalid event name "%s" found',
+        self::INVALID_EVENT_PROPERTY    => 'Invalid event property "%s"',
+        self::INVALID_EVENT_MANAGER     => 'Invalid event manager type "%s"',
+        self::IMMUTABLE_EVENT_METHOD    => 'Immutable method "%s" called',
+        self::METHOD_NOT_FOUND          => '"%s" has no method "%s"',
     ];
 }

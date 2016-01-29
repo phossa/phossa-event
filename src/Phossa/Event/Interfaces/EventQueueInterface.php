@@ -8,7 +8,7 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa\Event;
+namespace Phossa\Event\Interfaces;
 
 /**
  * EventQueueInterface
@@ -20,7 +20,7 @@ namespace Phossa\Event;
  * @author  Hong Zhang <phossa@126.com>
  * @see     \IteratorAggregate
  * @see     \Countable
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
  */
 interface EventQueueInterface extends \IteratorAggregate, \Countable
@@ -60,9 +60,9 @@ interface EventQueueInterface extends \IteratorAggregate, \Countable
     public function flush();
 
     /**
-     * Combine self with another event queue
+     * Combine self with another event queue and return the new queue
      *
-     * return the result event queue, self is not changed
+     * return the result event queue, self queue is not changed
      *
      * @param  EventQueueInterface $queue
      * @return EventQueueInterface the new event queue

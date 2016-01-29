@@ -2,8 +2,13 @@
 
 namespace Phossa\Event;
 
+use Phossa\Event\Interfaces\EventListenerStaticInterface;
+
 class ListenerStatic implements EventListenerStaticInterface
 {
+    /*
+     * able to execute all methods defined in getEventsListening()
+     */
     public static function __callStatic($name, $arguments) {
         $evt = $arguments[0];
         $evt->setProperty('s_' . $name, 'Static ' . $name);

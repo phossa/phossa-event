@@ -15,7 +15,8 @@ namespace Phossa\Event\Exception;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Shared\Exception\NotFoundException
+ * @see     \Phossa\Event\Exception\ExceptionInterface
+ * @see     \Phossa\Shared\Exception\NotFoundException
  * @version 1.0.0
  * @since   1.0.0 added
  */

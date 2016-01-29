@@ -8,26 +8,26 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa\Event;
+namespace Phossa\Event\Interfaces;
 
 /**
- * Static version of EventListenerInterface
+ * EventListenerInterface
  *
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
  */
-interface EventListenerStaticInterface
+interface EventListenerInterface
 {
     /**
-     * Get the list of events this static class is listening
+     * Get the list of events $this is listening
      *
      * e.g.
      * <code>
      * return array(
-     *     eventName1 => 'method1', // method1 of static class
+     *     eventName1 => 'method1', // method1 of $this
      *     eventName2 => array('method2', 20), // priority 20
      *     eventName3 => array(
      *         [ 'method3', 70 ],
@@ -36,10 +36,10 @@ interface EventListenerStaticInterface
      * );
      * </code>
      *
+     * @param  void
      * @return array array of events handling
      * @access public
-     * @static
      * @api
      */
-    public static function getEventsListening()/*# : array */;
+    public function getEventsListening()/*# : array */;
 }

@@ -8,20 +8,20 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa\Event;
+namespace Phossa\Event\Interfaces;
 
 /**
- * Make static classes event capable
+ * Make static classes event aware or capable
  *
  * Allow implementing static class has the ability to use events.
  *
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
  */
-interface EventCapableStaticInterface
+interface EventAwareStaticInterface
 {
     /**
      * Setup event related stuff
@@ -42,8 +42,9 @@ interface EventCapableStaticInterface
      * @param  EventManagerInterface $eventManager event manager object
      * @param  callable $eventFactory (optional) event factory callback
      * @return void
-     * @see    Phossa\Event\EventManager
-     * @see    Phossa\Event\Event
+     * @throws \Phossa\Event\Exception\LogicException
+     *         if some class properties not defined
+     * @see    \Phossa\Event\Interfaces\EventManagerInterface
      * @access public
      * @static
      * @api
@@ -51,7 +52,7 @@ interface EventCapableStaticInterface
     public static function setEventManager(
         EventManagerInterface $eventManager,
         callable $eventFactory = null
-    )/*# : void */;
+    );
 
     /**
      * Trigger an event and processed it by event manager, return the event
@@ -59,12 +60,12 @@ interface EventCapableStaticInterface
      * @param  string $eventName event name
      * @param  array $properties (optional) event property array
      * @return EventInterface
-     * @throws Exception\NotFoundException
+     * @throws \Phossa\Event\Exception\NotFoundException
      *         if event manager not set yet
-     * @throws Exception\RuntimeException
+     * @throws \Phossa\Event\Exception\RuntimeException
      *         exceptions from $event_manager->processEvent()
      * @access public
-     * @see    Phossa\Event\EventManager::processEvent()
+     * @see    \Phossa\Event\EventManager::processEvent()
      * @static
      * @api
      */

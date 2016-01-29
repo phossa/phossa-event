@@ -11,21 +11,30 @@
 namespace Phossa\Event;
 
 use Phossa\Event\Message\Message;
+use Phossa\Event\Interfaces\EventInterface;
 
 /**
  * Basic event class
  *
  * Simple usage:
  * <code>
- *     $evt = new Event('login.attempt', $this, ['username' => 'phossa']);
+ *     // $this is current context
+ *     $evt = new Event(
+ *         'login.attempt',         // event name
+ *         $this,                   // event context
+ *         ['username' => 'phossa'] // event properties
+ *     );
+ *
+ *     // stop event propagation
  *     $evt->stopPropagation();
  * </code>
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Event\EventInterface
- * @version 1.0.0
+ * @see     \Phossa\Event\Interfaces\EventInterface
+ * @version 1.0.2
  * @since   1.0.0 added
+ * @since   1.0.2 added setResults()/getResults()/__invoke()
  */
 class Event implements EventInterface
 {
@@ -33,7 +42,6 @@ class Event implements EventInterface
      * event name
      *
      * @var    string
-     * @type   string
      * @access protected
      */
     protected $name;
@@ -43,26 +51,31 @@ class Event implements EventInterface
      *
      * an object OR static class name (string)
      *
-     * @var    mixed
-     * @type   mixed
-     * @access protecteds
+     * @var    object|string
+     * @access protected
      */
-    protected $context;
+    protected $context = null;
 
     /**
      * event properties
      *
      * @var    array
-     * @type   array
      * @access protected
      */
     protected $properties;
 
     /**
+     * results from handlers
+     *
+     * @var    array
+     * @access protected
+     */
+    protected $results = [];
+
+    /**
      * stop propagation
      *
      * @var    bool
-     * @type   bool
      * @access protected
      */
     protected $stopped = false;
@@ -80,10 +93,23 @@ class Event implements EventInterface
      */
     public function __construct(
         /*# string */ $eventName,
-        $context,
+        $context = null,
         array $properties = []
     ) {
         $this->setName($eventName)
+             ->setContext($context)
+             ->setProperties($properties);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __invoke(
+        /*# string */ $eventName,
+        $context = null,
+        array $properties = []
+    ) {
+        return $this->setName($eventName)
              ->setContext($context)
              ->setProperties($properties);
     }
@@ -97,7 +123,8 @@ class Event implements EventInterface
         if (!is_string($eventName) || trim($eventName) === '') {
             throw new Exception\InvalidArgumentException(
                 Message::get(
-                    Message::INVALID_EVENT_NAME
+                    Message::INVALID_EVENT_NAME,
+                    $eventName
                 ),
                 Message::INVALID_EVENT_NAME
             );
@@ -118,11 +145,17 @@ class Event implements EventInterface
      * {@inheritDoc}
      */
     public function setContext($context)/*# : EventInterface */ {
+        // null context
+        if (is_null($context)) return $this;
+
+        // right context
         if (is_object($context) ||
             is_string($context) && class_exists($context, false)) {
             $this->context = $context;
             return $this;
         }
+
+        // not right
         throw new Exception\InvalidArgumentException(
             Message::get(
                 Message::INVALID_EVENT_CONTEXT,
@@ -145,6 +178,7 @@ class Event implements EventInterface
      */
     public function hasProperty(/*# string */ $name)/*#: bool */
     {
+        if (!is_scalar($name)) return false;
         return isset($this->properties[(string) $name]);
     }
 
@@ -176,6 +210,15 @@ class Event implements EventInterface
         $value
     )/*# : EventInterface */
     {
+        if (!is_scalar($name)) {
+            throw new Exception\InvalidArgumentException(
+                Message::get(
+                    Message::INVALID_EVENT_PROPERTY,
+                    $name
+                ),
+                Message::INVALID_EVENT_PROPERTY
+            );
+        }
         $this->properties[(string) $name] = $value;
         return $this;
     }
@@ -191,10 +234,41 @@ class Event implements EventInterface
     /**
      * {@inheritDoc}
      */
-    public function setProperties(array $properties)/*# : EventInterface */
-    {
-        $this->properties = $properties;
+    public function setProperties(
+        array $properties,
+        /*# bool */ $merge = false
+    )/*# : EventInterface */ {
+        if ($merge) {
+            foreach($properties as $n => $v) {
+                $this->setProperty($n, $v);
+            }
+        } else {
+            $this->properties = $properties;
+        }
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setResults(
+        $result,
+        /*# string */ $id = ''
+    )/*# : EventInterface */ {
+        if ($id) {
+            $this->results[$id] = $result;
+        } else {
+            $this->results[] = $result;
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResults()/*# : array */
+    {
+        return $this->results;
     }
 
     /**

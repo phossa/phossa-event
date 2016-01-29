@@ -8,18 +8,18 @@
  */
 /*# declare(strict_types=1); */
 
-namespace Phossa\Event;
+namespace Phossa\Event\Interfaces;
 
 /**
  * EventManager Interface
  *
- * No restrictions will be forced upon the event manager yet. It can be a
+ * No restrictions is forced upon the event manager yet. It can be a
  * singleton, a local event manager, or a child process event manager ...
  *
  * @interface
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.0
+ * @version 1.0.2
  * @since   1.0.0 added
  */
 interface EventManagerInterface
@@ -29,15 +29,15 @@ interface EventManagerInterface
      *
      * Retrieve all the callables attached to this event from THIS MANAGER and
      * execute them in order. Return the event if ends OR event is stopped OR
-     * the optional $callback returns false.
+     * the optional callable $callback returns false.
      *
-     * The $callback defined as `function($event, $response) {}`, where
+     * The $callback signature is `function($event, $response): bool {}`, where
      * $reponse is the return value from previous event handler.
      *
      * @param  EventInterface $event the event
      * @param  callable $callback (optional) a callback returns bool
-     * @return EventInterface
-     * @throws Exception\RuntimeException
+     * @return this
+     * @throws \Phossa\Event\Exception\RuntimeException
      *         rethrow any exception catched as RuntimeException
      * @access public
      * @api
@@ -45,38 +45,20 @@ interface EventManagerInterface
     public function processEvent(
         EventInterface $event,
         callable $callback = null
-    )/*# : EventInterface */;
-
-    /**
-     * Run an event with the provided queue
-     *
-     * The $callback defined as `function($event, $response) {}`, where
-     * $reponse is the return value from previous event handler.
-     *
-     * @param  EventInterface $event
-     * @param  EventQueueInterface $queue
-     * @param  callable $callback (optional) a callback returns bool
-     * @return EventInterface
-     * @throws Exception\RuntimeException
-     *         rethrow any exception catched as RuntimeException
-     * @access public
-     * @api
-     */
-    public function runEventQueue(
-        EventInterface $event,
-        EventQueueInterface $queue,
-        callable $callback = null
-    )/*# : EventInterface */;
+    )/*# : EventManagerInterface */;
 
     /**
      * Attach a listener with a specific event or all its events
+     *     * Attach to all its events where $eventName is ''
      *
-     * @param  mixed $listener object or static class name
+     * @param  mixed $listener object or static class name or callable
      * @param  string $eventName event name or '' for all its events
      * @param  int $priority priority level, bigger one has high priority
-     * @return EventManagerInterface $this
-     * @throws Exception\InvalidArgumentException
+     * @return this
+     * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $listener not right, or format of callable not right
+     * @throws \Phossa\Event\Exception\BadMethodCallExceptionException
+     *         if immutable
      * @access public
      * @api
      */
@@ -89,11 +71,13 @@ interface EventManagerInterface
     /**
      * Detach a listener from specific event or all of it attached
      *
-     * @param  mixed $listener object or static class name
+     * @param  mixed $listener object or static class name or callable
      * @param  string $eventName event name or '' for all its attached events
-     * @return EventManagerInterface $this
-     * @throws Exception\InvalidArgumentException
+     * @return this
+     * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $listener not right
+     * @throws \Phossa\Event\Exception\BadMethodCallExceptionException
+     *         if immutable
      * @access public
      * @api
      */
@@ -105,7 +89,8 @@ interface EventManagerInterface
     /**
      * Check event queue for $eventName
      *
-     * returns true if exists AND not empty
+     * returns true if exists AND not empty. Always return false if $eventName
+     * is not a string
      *
      * @param  string $eventName the event name
      * @return bool
@@ -121,7 +106,7 @@ interface EventManagerInterface
      *
      * @param  string $eventName the event name
      * @return EventQueueInterface
-     * @throws Exception\NotFoundException if not find
+     * @throws \Phossa\Event\Exception\NotFoundException if not find
      * @access public
      * @api
      */
@@ -133,7 +118,9 @@ interface EventManagerInterface
      * Clear the event queue for $eventName
      *
      * @param  string $eventName the event name
-     * @return EventManagerInterface $this
+     * @return this
+     * @throws \Phossa\Event\Exception\BadMethodCallExceptionException
+     *         if immutable
      * @access public
      * @api
      */

@@ -10,8 +10,10 @@
 
 namespace Phossa\Event;
 
+use Phossa\Event\Interfaces\EventQueueInterface;
+
 /**
- * Implementation of EventQueueInterface
+ * Implementation of EventQueueInterface, a wrapper of SplPriorityQueue
  *
  * Simple usage:
  * <code>
@@ -27,9 +29,9 @@ namespace Phossa\Event;
  *
  * @package \Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @see     Phossa\Event\EventQueueInterface
+ * @see     \Phossa\Event\Interfaces\EventQueueInterface
  * @see     \SplPriorityQueue
- * @version 1.0.0
+ * @version 1.0.1
  * @since   1.0.0 added
  */
 class EventQueue implements EventQueueInterface
@@ -37,8 +39,7 @@ class EventQueue implements EventQueueInterface
     /**
      * the inner SplPriorityQueue
      *
-     * @var    SplPriorityQueue
-     * @type   SplPriorityQueue
+     * @var    \SplPriorityQueue
      * @access protected
      */
     protected $queue;

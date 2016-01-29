@@ -42,40 +42,54 @@ class EventManagerTest
         $l = new Listener();
         $this->object->attachListener($l);
 
-        // event stopped by testY
+        /*
+         * 'evtTest4' => [
+         *      [ 'testX', 70 ],
+         *      [ 'testY', 40 ],
+         *      [ 'testZ', 30 ]
+         *  ]
+         */
         $e1 = new Event('evtTest4', $this);
-        $e1 = $this->object->processEvent($e1);
+        $this->object->processEvent($e1);
+
         $this->assertArrayHasKey(
             'testX', $e1->getProperties()
         );
+        // event stopped after testY() in Listener.php
         $this->assertArrayHasKey(
             'testY', $e1->getProperties()
         );
         $this->assertArrayNotHasKey(
             'testZ', $e1->getProperties()
         );
+
+        $this->assertEquals(5, count($e1->getProperties()));
     }
 
     /**
+     * test static listener
+     *
      * @covers Phossa\Event\EventManager::processEvent
      */
     public function testProcessEvent2()
     {
-        // test static listener
+        // event manager attach to a static listener
         $this->object->attachListener('Phossa\\Event\\ListenerStatic');
 
-        // event stopped by testY
         $e1 = new Event('evtTest3', $this);
-        $e1 = $this->object->processEvent($e1);
+        $this->object->processEvent($e1);
         $this->assertArrayHasKey(
             's_testA', $e1->getProperties()
         );
         $this->assertArrayHasKey(
             's_testB', $e1->getProperties()
         );
+        $this->assertEquals(2, count($e1->getProperties()));
     }
 
     /**
+     * test callback in processEvent
+     *
      * @covers Phossa\Event\EventManager::processEvent
      */
     public function testProcessEvent3()
@@ -84,8 +98,8 @@ class EventManagerTest
         $this->object->attachListener($l);
 
         // normal
-        $e1 = new Event('evtTest3', $this);
-        $e1 = $this->object->processEvent($e1, function() {
+        $e1 = new Event('evtTest3');
+        $this->object->processEvent($e1, function() {
             return true;
         });
         $this->assertArrayHasKey(
@@ -94,21 +108,26 @@ class EventManagerTest
         $this->assertArrayHasKey(
             'testB', $e1->getProperties()
         );
+        $this->assertEquals(5, count($e1->getProperties()));
 
         // stopped by callback
-        $e2 = new Event('evtTest3', $this);
-        $e2 = $this->object->processEvent($e2, function() {
+        $e2 = new Event('evtTest3');
+        $this->object->processEvent($e2, function() {
             return false;
         });
         $this->assertArrayHasKey(
             'testA', $e2->getProperties()
         );
+        // stopped after first run
         $this->assertArrayNotHasKey(
             'testB', $e2->getProperties()
         );
+        $this->assertEquals(1, count($e2->getProperties()));
     }
 
     /**
+     * attach a listner object
+     *
      * @covers Phossa\Event\EventManager::attachListener
      */
     public function testAttachListener1()
@@ -119,6 +138,8 @@ class EventManagerTest
     }
 
     /**
+     * not the right listener object
+     *
      * @covers Phossa\Event\EventManager::attachListener
      * @expectedException Phossa\Event\Exception\InvalidArgumentException
      * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_LISTENER
@@ -131,12 +152,32 @@ class EventManagerTest
     }
 
     /**
+     * attach a right static class
+     *
      * @covers Phossa\Event\EventManager::attachListener
      */
     public function testAttachListener3()
     {
         // attach static class
         $this->object->attachListener('Phossa\\Event\\ListenerStatic');
+    }
+
+    /**
+     * attach a callable directly
+     *
+     * @covers Phossa\Event\EventManager::attachListener
+     */
+    public function testAttachListener4()
+    {
+        // attach a callable
+        $this->object->attachListener(function(Event $evt) {
+            $evt->setProperty('xxx', 'bingo');
+            return 10;
+        }, 'bingoEvent');
+
+        $evt = new Event('bingoEvent');
+        $this->object->processEvent($evt);
+        $this->assertArrayHasKey('xxx', $evt->getProperties());
     }
 
     /**
@@ -147,17 +188,24 @@ class EventManagerTest
         $l = new Listener();
         $this->object->attachListener($l);
 
-        // detach one
+        // detach one event
         $this->assertTrue($this->object->hasEventQueue('evtTest3'));
         $this->object->detachListener($l, 'evtTest3');
-        $this->assertTrue($this->object->hasEventQueue('evtTest3') == false);
+        $this->assertTrue($this->object->hasEventQueue('evtTest3') === false);
 
-        // detach all
+        // the '*'
+        $this->assertTrue($this->object->hasEventQueue('*'));
+        $this->object->detachListener($l, '*');
+        $this->assertTrue($this->object->hasEventQueue('*') === false);
+
+        // detach all events
         $this->object->detachListener($l);
         $this->assertTrue(0 === count($this->object->getEventNames()));
     }
 
     /**
+     * detach a non listener object
+     *
      * @covers Phossa\Event\EventManager::detachListener
      * @expectedException Phossa\Event\Exception\InvalidArgumentException
      * @expectedExceptionCode Phossa\Event\Message\Message::INVALID_EVENT_LISTENER
@@ -169,6 +217,8 @@ class EventManagerTest
     }
 
     /**
+     * detach static listener
+     *
      * @covers Phossa\Event\EventManager::detachListener
      */
     public function testDetachListener3()
@@ -178,6 +228,25 @@ class EventManagerTest
         $this->object->attachListener($class);
         $this->assertTrue(3 === count($this->object->getEventNames()));
         $this->object->detachListener($class);
+        $this->assertTrue(0 === count($this->object->getEventNames()));
+    }
+
+    /**
+     * detach a callable directly
+     *
+     * @covers Phossa\Event\EventManager::detachListener
+     */
+    public function testDetachListener4()
+    {
+        $callable = function(Event $evt) {
+            $evt->setProperty('xxx', 'bingo');
+            return 10;
+        };
+
+        // detach a callable directly
+        $this->object->attachListener($callable, 'xSpecialEvent');
+        $this->assertTrue(1 === count($this->object->getEventNames()));
+        $this->object->detachListener($callable);
         $this->assertTrue(0 === count($this->object->getEventNames()));
     }
 
@@ -204,16 +273,18 @@ class EventManagerTest
         $this->object->attachListener($l);
 
         // check attached event
-        $q = $this->object->getEventQueue('evtTest2');
-        foreach ($q as $data) {
+        $q1 = $this->object->getEventQueue('evtTest2');
+        foreach ($q1 as $data) {
             $this->assertTrue(20 === $data['priority']);
             $this->assertTrue([$l, 'testD'] === $data['data']);
         }
 
-        // attach static again
+        // attach static class again
         $this->object->attachListener('Phossa\\Event\\ListenerStatic');
-        $q = $this->object->getEventQueue('evtTest2');
-        $this->assertTrue(2 === $q->count());
+        $q2 = $this->object->getEventQueue('evtTest2');
+
+        // now has 2 callable in the queue
+        $this->assertTrue(2 === $q2->count());
     }
 
     /**
@@ -226,7 +297,7 @@ class EventManagerTest
 
         $this->assertTrue($this->object->hasEventQueue('evtTest3'));
         $this->object->clearEventQueue('evtTest3');
-        $this->assertTrue($this->object->hasEventQueue('evtTest3') == false);
+        $this->assertTrue($this->object->hasEventQueue('evtTest3') === false);
     }
 
     /**
@@ -241,5 +312,4 @@ class EventManagerTest
         $evts = $this->object->getEventNames();
         $this->assertTrue($evts === array_keys($l->getEventsListening()));
     }
-
 }
