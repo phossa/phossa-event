@@ -1,8 +1,14 @@
-# Introduction
-Phossa-event is the event management package of this framework. Phossa is a
-lightweight PHP framework.
+# phossa-event
+[![Build Status](https://travis-ci.org/phossa/phossa-event.svg?branch=master)](https://travis-ci.org/phossa/phossa-event.svg?branch=master)
 
-# Installation
+Introduction
+---
+
+Phossa-event is an event management package for PHP. It decoupled from any
+packages other than the `phossa/phossa-shared`. It requires PHP5.4 only.
+
+Installation
+---
 
 Install via the `composer` utility.
 
@@ -20,7 +26,8 @@ or add the following lines to your `composer.json`
 }
 ```
 
-# Features
+Features
+---
 
 - Simple event dispatching use `EventDispatcher`
 
@@ -218,7 +225,8 @@ or add the following lines to your `composer.json`
 
 - Decoupled packages can be used seperately without the framework.
 
-# Usage
+Usage
+---
 
 - The simple event dispatcher
 
@@ -299,16 +307,19 @@ or add the following lines to your `composer.json`
 
   or static version.(see examples in **Features**)
 
-# Version
+Version
+---
 
 1.0.2
 
-# Dependencies
+Dependencies
+---
 
 - PHP >= 5.4.0
 
 - phossa/phossa-shared >= 1.0.2
 
-# License
+License
+---
 
 [MIT License](http://spdx.org/licenses/MIT)
