@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -29,12 +34,12 @@ use Phossa\Event\Interfaces\EventInterface;
  *     $evt->stopPropagation();
  * </code>
  *
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventInterface
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.0 added
- * @since   1.0.2 added setResults()/getResults()/__invoke()
+ * @since   1.0.2 added setResult()/getResults()/__invoke()
  */
 class Event implements EventInterface
 {
@@ -84,7 +89,7 @@ class Event implements EventInterface
      * Constructor
      *
      * @param  string $eventName event name
-     * @param  mixed $context event context, object or static class name
+     * @param  mixed $context (optional) event context, object/static classname
      * @param  array $properties (optional) event properties
      * @throws Exception\InvalidArgumentException
      *         if $eventName empty or $context is not the right type
@@ -117,9 +122,8 @@ class Event implements EventInterface
     /**
      * {@inheritDoc}
      */
-    public function setName(
-        /*# string */ $eventName
-    )/*# : EventInterface */ {
+    public function setName(/*# string */ $eventName)/*# : EventInterface */
+    {
         if (!is_string($eventName) || trim($eventName) === '') {
             throw new Exception\InvalidArgumentException(
                 Message::get(
@@ -144,9 +148,12 @@ class Event implements EventInterface
     /**
      * {@inheritDoc}
      */
-    public function setContext($context)/*# : EventInterface */ {
+    public function setContext($context)/*# : EventInterface */
+    {
         // null context
-        if (is_null($context)) return $this;
+        if (is_null($context)) {
+            return $this;
+        }
 
         // right context
         if (is_object($context) ||
@@ -178,7 +185,9 @@ class Event implements EventInterface
      */
     public function hasProperty(/*# string */ $name)/*#: bool */
     {
-        if (!is_scalar($name)) return false;
+        if (!is_scalar($name)) {
+            return false;
+        }
         return isset($this->properties[(string) $name]);
     }
 
@@ -208,8 +217,7 @@ class Event implements EventInterface
     public function setProperty(
         /*# string */ $name,
         $value
-    )/*# : EventInterface */
-    {
+    )/*# : EventInterface */ {
         if (!is_scalar($name)) {
             throw new Exception\InvalidArgumentException(
                 Message::get(
@@ -239,7 +247,7 @@ class Event implements EventInterface
         /*# bool */ $merge = false
     )/*# : EventInterface */ {
         if ($merge) {
-            foreach($properties as $n => $v) {
+            foreach ($properties as $n => $v) {
                 $this->setProperty($n, $v);
             }
         } else {
@@ -251,7 +259,7 @@ class Event implements EventInterface
     /**
      * {@inheritDoc}
      */
-    public function setResults(
+    public function setResult(
         $result,
         /*# string */ $id = ''
     )/*# : EventInterface */ {

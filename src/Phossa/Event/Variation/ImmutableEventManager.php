@@ -1,63 +1,66 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
 namespace Phossa\Event\Variation;
 
 use Phossa\Event\Exception;
-use Phossa\Event\Interfaces;
 use Phossa\Event\Message\Message;
+use Phossa\Event\Interfaces\EventInterface;
+use Phossa\Event\Interfaces\EventManagerInterface;
 
 /**
  * An event manager with an immutable wrapper, prevent from being changed
  *
  * <code>
  *     // low-level manager to hide
- *     $_evtManager = new EventManager();
- *     $_evtManager->attachListener(...);
+ *     $evtManager = new EventManager();
+ *     $evtManager->attachListener(...);
  *     ...
  *
  *     // expose an immutable event managet to user
- *     $evtManager = new Variation\ImmutableEventManager($_evtManager);
+ *     $iManager = new Variation\ImmutableEventManager($evtManager);
  *
  *     // cause an exception
- *     $evtManager->detachListener( ... );
+ *     $iManager->detachListener( ... );
  * </code>
  *
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventManagerInterface
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.2 added
  */
-class ImmutableEventManager implements Interfaces\EventManagerInterface
+class ImmutableEventManager implements EventManagerInterface
 {
     /**
-     * inner event manager
+     * slave event manager
      *
-     * @var    Interfaces\EventManagerInterface
+     * @var    EventManagerInterface
      * @access protected
      */
     protected $event_manager;
 
     /**
-     * Constructor, insert a EventManager
+     * Constructor, insert a slave EventManager
      *
-     * @param  Interfaces\EventManagerInterface $eventManager event manager
-     * @return void
-     * @throws void
+     * @param  EventManagerInterface $eventManager event manager
      * @access public
      * @api
      */
-    public function __construct(
-        Interfaces\EventManagerInterface $eventManager
-    ) {
+    public function __construct(EventManagerInterface $eventManager)
+    {
         $this->event_manager = $eventManager;
     }
 
@@ -65,7 +68,7 @@ class ImmutableEventManager implements Interfaces\EventManagerInterface
      * {@inheritDoc}
      */
     public function processEvent(
-        Interfaces\EventInterface $event,
+        EventInterface $event,
         callable $callback = null
     )/*# : EventManagerInterface */ {
         return $this->event_manager->processEvent($event, $callback);
@@ -135,9 +138,8 @@ class ImmutableEventManager implements Interfaces\EventManagerInterface
      * @throws Exception\BadMethodCallException
      * @access protected
      */
-    protected function throwsBadMethodCallException(
-        /*# string */ $method
-    ) {
+    protected function throwsBadMethodCallException(/*# string */ $method)
+    {
         throw new Exception\BadMethodCallException(
             Message::get(Message::IMMUTABLE_EVENT_METHOD, $method),
             Message::IMMUTABLE_EVENT_METHOD

@@ -230,15 +230,15 @@ class EventTest
     }
 
     /**
-     * @covers Phossa\Event\Event::setResults
+     * @covers Phossa\Event\Event::setResult
      * @covers Phossa\Event\Event::getResults
      */
-    public function testSetResults()
+    public function testSetResult()
     {
-        $this->object->setResults('bingo');
+        $this->object->setResult('bingo');
         $this->assertEquals(['bingo'], $this->object->getResults());
 
-        $this->object->setResults('bingo', 'wow');
+        $this->object->setResult('bingo', 'wow');
         $this->assertEquals(
             ['bingo', 'wow' => 'bingo'],
             $this->object->getResults()

@@ -1,16 +1,21 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
 namespace Phossa\Event\Variation;
 
-use Phossa\Event\Interfaces;
+use Phossa\Event\Interfaces\EventManagerInterface;
 
 /**
  * You can have lots of event managers but only one global copy
@@ -30,17 +35,16 @@ use Phossa\Event\Interfaces;
  *     }
  * </code>
  *
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventManagerInterface
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.2 added
  */
-class ShareableEventManager
-    implements
-        Interfaces\EventManagerInterface,
-        \Phossa\Shared\Pattern\ShareableInterface
+class ShareableEventManager implements
+    EventManagerInterface,
+    \Phossa\Shared\Pattern\ShareableInterface
 {
-    use Interfaces\EventManagerTrait,
+    use \Phossa\Event\Interfaces\EventManagerTrait,
         \Phossa\Shared\Pattern\ShareableTrait;
 }

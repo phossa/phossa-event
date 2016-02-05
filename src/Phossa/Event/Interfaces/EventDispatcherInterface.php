@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -16,10 +21,11 @@ use Phossa\Event\Exception;
  * EventDispatcherInterface
  *
  * @interface
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.2 added
+ * @since   1.0.3 removed ::set()/::get()
  */
 interface EventDispatcherInterface
 {
@@ -95,9 +101,7 @@ interface EventDispatcherInterface
      * @access public
      * @api
      */
-    public function has(
-        /*# string */ $eventName
-    )/*# : bool */;
+    public function has(/*# string */ $eventName)/*# : bool */;
 
     /**
      * Detach a callable from event name.
@@ -182,32 +186,5 @@ interface EventDispatcherInterface
      * @access public
      * @api
      */
-    public function isTriggered(
-        /*# string */ $eventName
-    )/*# : bool */;
-
-    /**
-     * Set a dispatcher to be used by static methods
-     *
-     * @param  EventDispatcherInterface $dispatcher dispatcher to use
-     * @return void
-     * @access public
-     * @static
-     * @api
-     */
-    public static function set(
-        EventDispatcherInterface $dispatcher
-    );
-
-    /**
-     * Get a dispatcher to be used by static methods. Auto generate one
-     * dispatcher if it is not set
-     *
-     * @param  void
-     * @return EventDispatcherInterface
-     * @access public
-     * @static
-     * @api
-     */
-    public static function get()/*# : EventDispatcherInterface */;
+    public function isTriggered(/*# string */ $eventName)/*# : bool */;
 }

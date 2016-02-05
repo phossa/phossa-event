@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -16,8 +21,8 @@ use Phossa\Event\EventManager;
 /**
  * Implementation of EventManagerCompositeInterface
  *
- * A composite event manager dispatches events not only to the events to its
- * own listeners but also dispatches to other event managers.
+ * A composite event manager dispatches events not only to its own listeners
+ * but also to other event managers.
  *
  * e.g.
  * <code>
@@ -32,19 +37,16 @@ use Phossa\Event\EventManager;
  *      $local_manager->processEvent($evt);
  * </code>
  *
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\EventManager
  * @see     \Phossa\Event\Interfaces\EventManagerCompositeInterface
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.0 added
  * @since   1.0.2 converted to use trait
  */
-class CompositeEventManager
-    extends
-        EventManager
-    implements
-        Interfaces\EventManagerCompositeInterface
+class CompositeEventManager extends EventManager implements
+    Interfaces\EventManagerCompositeInterface
 {
     use Interfaces\EventManagerCompositeTrait;
 }

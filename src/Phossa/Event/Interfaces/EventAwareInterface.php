@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -16,31 +21,29 @@ namespace Phossa\Event\Interfaces;
  * Allow implementing classes has the ability to use events (trigger etc.)
  *
  * @interface
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.1
+ * @version 1.0.3
  * @since   1.0.0 added
+ * @since   1.0.3 changed to event prototype
  */
 interface EventAwareInterface
 {
     /**
      * Setup event related stuff
      *
-     * Inject the event manager object. also, if using a different event class
-     * other than the 'Phossa\Event\Event', user may pass a callable which
-     * takes same arguments as the 'Event' class, to create event object.
+     * Inject the event manager object. Also, if using a different event class
+     * other than the 'Phossa\Event\Event', user may pass a prototype.
      *
      * <code>
      *     $this->setEventManager(
      *         new EventManager(),
-     *         function($evtName, $context, $properties) {
-     *             return new MyEvent($evtName, $context, $properties);
-     *         }
+     *         new MyEvent('prototype')
      *     );
      * </code>
      *
      * @param  EventManagerInterface $eventManager event manager object
-     * @param  callable $eventFactory (optional) event factory callback
+     * @param  EventInterface $eventPrototype (optional) event prototype
      * @return this
      * @see    \Phossa\Event\Interfaces\EventManagerInterface
      * @access public
@@ -48,7 +51,7 @@ interface EventAwareInterface
      */
     public function setEventManager(
         EventManagerInterface $eventManager,
-        callable $eventFactory = null
+        EventInterface $eventPrototype = null
     )/*# : EventAwareInterface */;
 
     /**

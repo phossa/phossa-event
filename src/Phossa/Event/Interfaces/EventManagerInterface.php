@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -17,9 +22,9 @@ namespace Phossa\Event\Interfaces;
  * singleton, a local event manager, or a child process event manager ...
  *
  * @interface
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.0 added
  */
 interface EventManagerInterface
@@ -97,9 +102,7 @@ interface EventManagerInterface
      * @access public
      * @api
      */
-    public function hasEventQueue(
-        /*# string */ $eventName
-    )/*# : bool */;
+    public function hasEventQueue(/*# string */ $eventName)/*# : bool */;
 
     /**
      * Get the event queue for $eventName
@@ -131,7 +134,6 @@ interface EventManagerInterface
     /**
      * Get all event names in an array
      *
-     * @param  void
      * @return string[]
      * @access public
      * @api

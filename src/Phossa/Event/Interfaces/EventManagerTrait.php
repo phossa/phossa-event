@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -18,10 +23,10 @@ use Phossa\Event\Message\Message;
  * Implementation of EventManagerInterface
  *
  * @trait
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventManagerInterface
- * @version 1.0.1
+ * @version 1.0.3
  * @since   1.0.0 added
  */
 trait EventManagerTrait
@@ -67,7 +72,7 @@ trait EventManagerTrait
             $evts = $this->getListenerEvents($listener, $eventName);
 
             // attach events
-            foreach($evts as $name => $callable) {
+            foreach ($evts as $name => $callable) {
                 $this->attachIt($name, $listener, $callable, (int) $priority);
             }
         }
@@ -102,7 +107,7 @@ trait EventManagerTrait
             $evts = $this->getListenerEvents($listener, $eventName);
 
             // detach events
-            foreach($evts as $name => $callable) {
+            foreach ($evts as $name => $callable) {
                 $this->detachIt($name, $listener, $callable);
             }
         }
@@ -113,9 +118,8 @@ trait EventManagerTrait
     /**
      * {@inheritDoc}
      */
-    public function hasEventQueue(
-        /*# string */ $eventName
-    )/*# : bool */ {
+    public function hasEventQueue(/*# string */ $eventName)/*# : bool */
+    {
         // event name has to be STRING
         if (!is_string($eventName)) {
             trigger_error(
@@ -194,18 +198,22 @@ trait EventManagerTrait
         callable $callback = null
     )/*# : EventManagerInterface */ {
         try {
-            foreach($queue as $data) {
+            foreach ($queue as $data) {
                 // execute each callable from the queue
                 $res = call_user_func($data['data'], $event);
 
                 // set results
-                $event->setResults($res);
+                $event->setResult($res);
 
                 // stop propagation if callable returns FALSE
-                if ($res === false) $event->stopPropagation();
+                if ($res === false) {
+                    $event->stopPropagation();
+                }
 
                 // break if event stopped
-                if ($event->isPropagationStopped()) break;
+                if ($event->isPropagationStopped()) {
+                    break;
+                }
 
                 // break if $callback return false
                 if ($callback &&
@@ -216,7 +224,6 @@ trait EventManagerTrait
             }
 
             return $this;
-
         } catch (\Exception $e) {
             // rethrow any exception caught
             throw new Exception\RuntimeException(
@@ -292,9 +299,10 @@ trait EventManagerTrait
         }
 
         if ($eventName != '') {
-            $names = array_keys($evts);
-            foreach($names as $n) {
-                if ($n !== $eventName) unset($evts[$n]);
+            foreach (array_keys($evts) as $name) {
+                if ($name !== $eventName) {
+                    unset($evts[$name]);
+                }
             }
         }
 
@@ -324,7 +332,7 @@ trait EventManagerTrait
 
             // eventName3 => [ ['method3', 70], 'method4', ... ]
             } else {
-                foreach($callable as $cc) {
+                foreach ($callable as $cc) {
                     $result = array_merge(
                         $result,
                         $this->makeCallables($listener, $cc, $priority)
@@ -332,14 +340,15 @@ trait EventManagerTrait
                 }
                 return $result;
             }
-
         } elseif (is_string($callable)) {
             // eventName1 => 'method1'
             $xc = $callable;
         }
 
         if (isset($xc)) {
-            if (!is_callable($xc)) $xc = array($listener, $xc);
+            if (!is_callable($xc)) {
+                $xc = array($listener, $xc);
+            }
             if (is_callable($xc)) {
                 $result[] = [ $xc, $priority ];
             }
@@ -397,7 +406,7 @@ trait EventManagerTrait
                 Message::INVALID_EVENT_CALLABLE
             );
         } else {
-            foreach($xc as $c) {
+            foreach ($xc as $c) {
                 $q->insert($c[0], $c[1]);
             }
         }
@@ -421,7 +430,9 @@ trait EventManagerTrait
         $callable
     ) {
         // queue not found
-        if ($eventName != '' && !$this->hasEventQueue($eventName)) return;
+        if ($eventName != '' && !$this->hasEventQueue($eventName)) {
+            return;
+        }
 
         // detach callable directly
         if (is_null($listener)) {
@@ -441,18 +452,22 @@ trait EventManagerTrait
         } else {
             if ($eventName != '') {
                 $q = $this->getEventQueue($eventName);
-                foreach($xc as $c) {
+                foreach ($xc as $c) {
                     $q->remove($c[0]);
                 }
-                if ($q->count() === 0) unset($this->events[$eventName]);
+                if ($q->count() === 0) {
+                    unset($this->events[$eventName]);
+                }
             } else {
                 $names = $this->getEventNames();
-                foreach($names as $n) {
+                foreach ($names as $n) {
                     $q = $this->getEventQueue($n);
-                    foreach($xc as $c) {
+                    foreach ($xc as $c) {
                         $q->remove($c[0]);
                     }
-                    if ($q->count() === 0) unset($this->events[$n]);
+                    if ($q->count() === 0) {
+                        unset($this->events[$n]);
+                    }
                 }
             }
         }
@@ -476,7 +491,7 @@ trait EventManagerTrait
 
         // combine all globbing queue
         $queue = new EventQueue();
-        foreach($names as $n) {
+        foreach ($names as $n) {
             if ($manager->hasEventQueue($n)) {
                 $queue = $queue->combine($manager->getEventQueue($n));
             }
@@ -502,12 +517,14 @@ trait EventManagerTrait
         array $names
     )/*# : array */ {
         $result = [];
-        foreach($names as $n) {
+        foreach ($names as $n) {
             if ($n === '*' || $n === $eventName || $eventName === '') {
                 $result[] = $n;
             } elseif (strpos($n, '*') !== false) {
                 $regex = str_replace(array('.', '*'), array('[.]', '.*?'), $n);
-                if (preg_match('/^'.$regex.'$/', $eventName)) $result[] = $n;
+                if (preg_match('/^'.$regex.'$/', $eventName)) {
+                    $result[] = $n;
+                }
             }
         }
         return $result;

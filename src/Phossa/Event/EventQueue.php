@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -27,12 +32,13 @@ use Phossa\Event\Interfaces\EventQueueInterface;
  *     if ($queue->count()) $queue->flush();
  * </code>
  *
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventQueueInterface
  * @see     \SplPriorityQueue
- * @version 1.0.1
+ * @version 1.0.3
  * @since   1.0.0 added
+ * @since   1.0.3 removed SplPriority to support HHVM
  */
 class EventQueue implements EventQueueInterface
 {
@@ -47,7 +53,6 @@ class EventQueue implements EventQueueInterface
     /**
      * constructor
      *
-     * @param  void
      * @access public
      * @api
      */
@@ -59,7 +64,8 @@ class EventQueue implements EventQueueInterface
     /**
      * {@inheritDoc}
      */
-    public function count() {
+    public function count()
+    {
         return $this->queue->count();
     }
 
@@ -68,7 +74,8 @@ class EventQueue implements EventQueueInterface
      *
      * returns ['data' => data, 'priority' => priority]
      */
-    public function getIterator() {
+    public function getIterator()
+    {
         $nqueue = clone $this->queue;
         $nqueue->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
         return $nqueue;
@@ -92,8 +99,10 @@ class EventQueue implements EventQueueInterface
     public function remove(callable $callable)
     {
         $nqueue = new \SplPriorityQueue();
-        foreach($this as $p) {
-            if ($p['data'] === $callable) continue;
+        foreach ($this as $p) {
+            if ($p['data'] === $callable) {
+                continue;
+            }
             $nqueue->insert($p['data'], (int) $p['priority']);
         }
         $this->queue = $nqueue;
@@ -114,7 +123,7 @@ class EventQueue implements EventQueueInterface
         EventQueueInterface $queue
     )/*# : EventQueueInterface */ {
         $nqueue = clone $this;
-        foreach($queue as $data) {
+        foreach ($queue as $data) {
             $nqueue->insert($data['data'], (int) $data['priority']);
         }
         return $nqueue;

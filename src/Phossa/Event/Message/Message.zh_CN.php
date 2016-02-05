@@ -1,7 +1,26 @@
 <?php
+/**
+ * Phossa Project
+ *
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
+ */
 
-use Phossa\Event\Message\Message;
-
+/**
+ * Chinese translation for Message.php
+ *
+ * @package Phossa\Event
+ * @author  Hong Zhang <phossa@126.com>
+ * @see     \Phossa\Event\Message\Message
+ * @version 1.0.3
+ * @since   1.0.1 added
+ */
 return [
     Message::PROPERTY_NOT_FOUND         => '"%s" 没有此属性 "%s"',
     Message::MANAGER_NOT_FOUND          => '类库 "%s" 中还未设置事件管理员',
@@ -13,4 +32,6 @@ return [
     Message::INVALID_EVENT_NAME         => '事件名称 "%s" 错误',
     Message::INVALID_EVENT_PROPERTY    => '无效的事件属性 "%s"',
     Message::INVALID_EVENT_MANAGER     => '无效的事件管理员类型 "%s"',
+    Message::IMMUTABLE_EVENT_METHOD    => '非法执行了固化方法 "%s"',
+    Message::METHOD_NOT_FOUND          => '"%s" 没有方法 "%s"',
 ];

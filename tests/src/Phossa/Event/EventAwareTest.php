@@ -54,9 +54,7 @@ class EventAwareTest extends \PHPUnit_Framework_TestCase
         // set event manager
         $this->object->setEventManager(
             $manager,
-            function($e, $c, $p) {
-                return new Event($e, $c, $p);
-            }
+            new Event('prototype')
         );
 
         $e1 = $this->object->triggerEvent('evtTest4');

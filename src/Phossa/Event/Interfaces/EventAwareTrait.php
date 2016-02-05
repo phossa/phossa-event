@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -20,11 +25,12 @@ use Phossa\Event\Message\Message;
  * Simple implementation of EventAwareInterface
  *
  * @trait
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventAwareInterface
- * @version 1.0.1
+ * @version 1.0.3
  * @since   1.0.0 added
+ * @since   1.0.3 changed to event prototype
  */
 trait EventAwareTrait
 {
@@ -37,22 +43,24 @@ trait EventAwareTrait
     protected $event_manager;
 
     /**
-     * event factory
+     * event prototype
      *
-     * @var    callable
+     * @var    EventInterface
      * @access protected
      */
-    protected $event_factory;
+    protected $event_proto;
 
     /**
      * {@inheritDoc}
      */
     public function setEventManager(
         EventManagerInterface $eventManager,
-        callable $eventFactory = null
+        EventInterface $eventPrototype = null
     )/*# : EventAwareInterface */ {
         $this->event_manager = $eventManager;
-        $this->event_factory = $eventFactory;
+        if (!is_null($eventPrototype)) {
+            $this->event_proto = $eventPrototype;
+        }
         return $this;
     }
 
@@ -64,15 +72,11 @@ trait EventAwareTrait
         array $properties = []
     )/*# : EventInterface */ {
         if (null !== $this->event_manager) {
-            if ($this->event_factory) {
-                $evt = call_user_func(
-                    $this->event_factory,
-                    $eventName,
-                    $this,
-                    $properties
-                );
-            } else {
+            if (is_null($this->event_proto)) {
                 $evt = new Event($eventName, $this, $properties);
+            } else {
+                $evt = clone $this->event_proto;
+                $evt($eventName, $this, $properties);
             }
             $this->event_manager->processEvent($evt);
             return $evt;

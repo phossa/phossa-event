@@ -46,9 +46,7 @@ class EventAwareStaticTest extends \PHPUnit_Framework_TestCase
     {
         EventAwareStatic::setEventManager(
             new EventManager(),
-            function($e, $c, $p) {
-                return new Event($e, $c, $p);
-            }
+            new Event('prototype')
         );
     }
 

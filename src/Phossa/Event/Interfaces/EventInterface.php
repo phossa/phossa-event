@@ -1,10 +1,15 @@
 <?php
-/*
+/**
  * Phossa Project
  *
- * @see         http://www.phossa.com/
- * @copyright   Copyright (c) 2015 phossa.com
- * @license     http://mit-license.org/ MIT License
+ * PHP version 5.4
+ *
+ * @category  Package
+ * @package   Phossa\Event
+ * @author    Hong Zhang <phossa@126.com>
+ * @copyright 2015 phossa.com
+ * @license   http://mit-license.org/ MIT License
+ * @link      http://www.phossa.com/
  */
 /*# declare(strict_types=1); */
 
@@ -14,16 +19,27 @@ namespace Phossa\Event\Interfaces;
  * Event interface
  *
  * @interface
- * @package \Phossa\Event
+ * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.2
+ * @version 1.0.3
  * @since   1.0.0 added
- * @since   1.0.2 added setResults()/getResults()/__invoke()
+ * @since   1.0.2 added setResult()/getResults()/__invoke()
  */
 interface EventInterface
 {
     /**
      * Force the __invoke(), used after protyping cloning
+     *
+     * <code>
+     * // if prototype is set
+     * if (is_object($this->event_prototype)) {
+     *    // clone the prototype
+     *    $evt = clone $this->event_prototype;
+     *
+     *    // set name etc. with the new event
+     *    $evt($eventName, null, $data);
+     * }
+     * </code>
      *
      * @param  string $eventName event name
      * @param  mixed $context event context, object or static class name
@@ -50,14 +66,11 @@ interface EventInterface
      * @access public
      * @api
      */
-    public function setName(
-        /*# string */ $eventName
-    )/*# : EventInterface */;
+    public function setName(/*# string */ $eventName)/*# : EventInterface */;
 
     /**
      * Get event name
      *
-     * @param  void
      * @return string
      * @access public
      * @api
@@ -79,7 +92,6 @@ interface EventInterface
     /**
      * Get event context, usually an object or static class name
      *
-     * @param  void
      * @return object|string
      * @access public
      * @api
@@ -133,7 +145,6 @@ interface EventInterface
     /**
      * Get event's all properties in array
      *
-     * @param  void
      * @return array
      * @access public
      * @api
@@ -165,7 +176,7 @@ interface EventInterface
      * @since  1.0.2 added
      * @api
      */
-    public function setResults(
+    public function setResult(
         $result,
         /*# string */ $id = ''
     )/*# : EventInterface */;
@@ -173,7 +184,6 @@ interface EventInterface
     /**
      * Get results from event handlers
      *
-     * @param  void
      * @return array
      * @access public
      * @since  1.0.2 added
@@ -184,7 +194,6 @@ interface EventInterface
     /**
      * Stop event propagation
      *
-     * @param  void
      * @return this
      * @access public
      * @api
@@ -194,7 +203,6 @@ interface EventInterface
     /**
      * Is event propagation stopped
      *
-     * @param  void
      * @return bool
      * @access public
      * @api
