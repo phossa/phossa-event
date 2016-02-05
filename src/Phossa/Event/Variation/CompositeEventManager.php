@@ -54,7 +54,7 @@ class CompositeEventManager extends EventManager implements
     /**
      * Pool for other managers
      *
-     * @var     EventManagerInterface[]
+     * @var     Interfaces\EventManagerInterface[]
      * @access  protected
      */
     protected $manager_pool = [];

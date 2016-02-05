@@ -36,7 +36,7 @@ interface EventManagerCompositeInterface
      *
      * @param  string $name unique name for this manager
      * @param  EventManagerInterface $manager
-     * @return this
+     * @return EventManagerCompositeInterface
      * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $manager is also EventManagerCompositeInterface
      * @access public
@@ -51,7 +51,7 @@ interface EventManagerCompositeInterface
      * Unset extra manager
      *
      * @param  string $name manager name (id)
-     * @return this
+     * @return EventManagerCompositeInterface
      * @access public
      * @api
      */
