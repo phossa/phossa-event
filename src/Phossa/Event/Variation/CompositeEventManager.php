@@ -15,8 +15,10 @@
 
 namespace Phossa\Event\Variation;
 
+use Phossa\Event\Exception;
 use Phossa\Event\Interfaces;
 use Phossa\Event\EventManager;
+use Phossa\Event\Message\Message;
 
 /**
  * Implementation of EventManagerCompositeInterface
@@ -44,9 +46,84 @@ use Phossa\Event\EventManager;
  * @version 1.0.3
  * @since   1.0.0 added
  * @since   1.0.2 converted to use trait
+ * @since   1.0.3 removed trait
  */
 class CompositeEventManager extends EventManager implements
     Interfaces\EventManagerCompositeInterface
 {
-    use Interfaces\EventManagerCompositeTrait;
+    /**
+     * Pool for other managers
+     *
+     * @var     EventManagerInterface[]
+     * @access  protected
+     */
+    protected $manager_pool = [];
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOtherManager(
+        /*# string */ $name,
+        Interfaces\EventManagerInterface $manager
+    )/*# : EventManagerCompositeInterface */ {
+        // you can NOT use composite type as other manager
+        if ($manager instanceof Interfaces\EventManagerCompositeInterface) {
+            throw new Exception\InvalidArgumentException(
+                Message::get(
+                    Message::INVALID_EVENT_MANAGER,
+                    get_class($manager)
+                ),
+                Message::INVALID_EVENT_MANAGER
+            );
+        }
+
+        $this->manager_pool[$name] = $manager;
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function unsetOtherManager(
+        /*# string */ $name
+    )/*# : EventManagerCompositeInterface */ {
+        unset($this->manager_pool[$name]);
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOtherManagers()/*# : array */
+    {
+        return $this->manager_pool;
+    }
+
+    /**
+     * Process events by all managers in the pool
+     *
+     * {@inheritDoc}
+     */
+    public function processEvent(
+        Interfaces\EventInterface $event,
+        callable $callback = null
+    )/*# : EventManagerInterface */ {
+        $eventName = $event->getName();
+
+        // check self's queue
+        $queue = $this->matchEventQueue($eventName, $this);
+
+        // merge with other managers' queue
+        $managers = $this->getOtherManagers();
+        foreach ($managers as $mgr) {
+            // other manager's own queue
+            $q = $this->matchEventQueue($eventName, $mgr);
+            if ($q->count()) {
+                $queue = $queue->combine($q);
+            }
+        }
+
+        // run thru the queue
+        return $this->runEventQueue($event, $queue, $callback);
+    }
 }

@@ -44,7 +44,7 @@ interface EventInterface
      * @param  string $eventName event name
      * @param  mixed $context event context, object or static class name
      * @param  array $properties (optional) event properties
-     * @return this
+     * @return EventInterface
      * @throws Exception\InvalidArgumentException
      *         if $eventName empty or $context is not the right type
      * @access public
@@ -60,7 +60,7 @@ interface EventInterface
      * Set event name
      *
      * @param  string $eventName event name
-     * @return this
+     * @return EventInterface
      * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $eventName empty or not a string
      * @access public
@@ -81,7 +81,7 @@ interface EventInterface
      * Set event context, usually an object or static class name
      *
      * @param  object|string $context object or static classname
-     * @return this
+     * @return EventInterface
      * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if context not an object or not static class name
      * @access public
@@ -131,7 +131,7 @@ interface EventInterface
      *
      * @param  string $name property name
      * @param  mixed $value property value
-     * @return this
+     * @return EventInterface
      * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $name is not a string
      * @access public
@@ -156,7 +156,7 @@ interface EventInterface
      *
      * @param  array $properties property array
      * @param  bool $merge (optional) merge with existing properties
-     * @return this
+     * @return EventInterface
      * @access public
      * @since  1.0.2 added $merge param
      * @api
@@ -171,7 +171,7 @@ interface EventInterface
      *
      * @param  mixed $result the result from event handler
      * @param  string $id (optional) id for this result
-     * @return this
+     * @return EventInterface
      * @access public
      * @since  1.0.2 added
      * @api
@@ -194,7 +194,7 @@ interface EventInterface
     /**
      * Stop event propagation
      *
-     * @return this
+     * @return EventInterface
      * @access public
      * @api
      */

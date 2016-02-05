@@ -215,7 +215,7 @@ trait EventManagerTrait
                     break;
                 }
 
-                // break if $callback return false
+                // run callback
                 if ($callback &&
                     call_user_func($callback, $event, $res) === false
                 ) {
@@ -325,12 +325,12 @@ trait EventManagerTrait
     )/*# : array */ {
         $result = [];
         if (is_array($callable)) {
-            // eventName2 => [ 'method2', 20 ]
+            // format: [ 'method2', 20 ]
             if (isset($callable[1]) && is_int($callable[1])) {
                 $priority = $callable[1];
                 $xc = $callable[0];
 
-            // eventName3 => [ ['method3', 70], 'method4', ... ]
+            // format: [ ['method3', 70], 'method4', ... ]
             } else {
                 foreach ($callable as $cc) {
                     $result = array_merge(
@@ -341,7 +341,7 @@ trait EventManagerTrait
                 return $result;
             }
         } elseif (is_string($callable)) {
-            // eventName1 => 'method1'
+            // format: 'method1'
             $xc = $callable;
         }
 
