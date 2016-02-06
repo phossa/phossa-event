@@ -41,7 +41,7 @@ interface EventManagerInterface
      *
      * @param  EventInterface $event the event
      * @param  callable $callback (optional) a callback returns bool
-     * @return EventManagerInterface
+     * @return EventManagerInterface this
      * @throws \Phossa\Event\Exception\RuntimeException
      *         rethrow any exception catched as RuntimeException
      * @access public
