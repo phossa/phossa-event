@@ -53,7 +53,7 @@ class EventQueueTest
     public function testGetIterator1()
     {
         $it = $this->object->getIterator();
-        $this->assertTrue($it instanceof \SplPriorityQueue);
+        $this->assertTrue($it instanceof \ArrayAccess);
     }
 
     /**

@@ -92,6 +92,11 @@ class Message extends MessageAbstract
      */
     const METHOD_NOT_FOUND      = 1510101209;
 
+    /**
+     * Invalid event callable priority "%s"
+     */
+    const INVALID_EVENT_PRIORITY= 1510101210;
+
     /**#@-*/
 
     /**
@@ -110,5 +115,6 @@ class Message extends MessageAbstract
         self::INVALID_EVENT_MANAGER     => 'Invalid event manager type "%s"',
         self::IMMUTABLE_EVENT_METHOD    => 'Immutable method "%s" called',
         self::METHOD_NOT_FOUND          => '"%s" has no method "%s"',
+        self::INVALID_EVENT_PRIORITY    => 'Invalid event callable priority "%s"',
     ];
 }

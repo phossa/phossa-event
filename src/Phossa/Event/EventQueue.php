@@ -17,8 +17,11 @@ namespace Phossa\Event;
 
 use Phossa\Event\Interfaces\EventQueueInterface;
 
+use Phossa\Event\Exception;
+use Phossa\Event\Message\Message;
+
 /**
- * Implementation of EventQueueInterface, a wrapper of SplPriorityQueue
+ * Implementation of EventQueueInterface
  *
  * Simple usage:
  * <code>
@@ -35,7 +38,6 @@ use Phossa\Event\Interfaces\EventQueueInterface;
  * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventQueueInterface
- * @see     \SplPriorityQueue
  * @version 1.0.3
  * @since   1.0.0 added
  * @since   1.0.3 removed SplPriority to support HHVM
@@ -43,9 +45,9 @@ use Phossa\Event\Interfaces\EventQueueInterface;
 class EventQueue implements EventQueueInterface
 {
     /**
-     * the inner SplPriorityQueue
+     * inner array
      *
-     * @var    \SplPriorityQueue
+     * @var    array
      * @access protected
      */
     protected $queue;
@@ -58,7 +60,7 @@ class EventQueue implements EventQueueInterface
      */
     public function __construct()
     {
-        $this->queue = new \SplPriorityQueue();
+        $this->flush();
     }
 
     /**
@@ -66,7 +68,7 @@ class EventQueue implements EventQueueInterface
      */
     public function count()
     {
-        return $this->queue->count();
+        return count($this->queue);
     }
 
     /**
@@ -76,9 +78,7 @@ class EventQueue implements EventQueueInterface
      */
     public function getIterator()
     {
-        $nqueue = clone $this->queue;
-        $nqueue->setExtractFlags(\SplPriorityQueue::EXTR_BOTH);
-        return $nqueue;
+        return new \ArrayIterator($this->queue);
     }
 
     /**
@@ -88,9 +88,26 @@ class EventQueue implements EventQueueInterface
      */
     public function insert(
         callable $callable,
-        /*# int */ $priority
+        /*# int */ $priority,
+        /*# bool */ $sort = true
     ) {
-        $this->queue->insert($callable, (int) $priority);
+        static $MAX = 9999999;
+
+        if ($priority > 100 || $priority < 0) {
+            throw new Exception\InvalidArgumentException(
+                Message::get(Message::INVALID_EVENT_PRIORITY, $priority),
+                Message::INVALID_EVENT_PRIORITY
+            );
+        }
+
+        // key
+        $key  = $priority * 10000000 + $MAX--;
+        $this->queue[$key] = ['data' => $callable, 'priority' => $priority ];
+
+        // sort by priority
+        if ($sort) {
+            $this->sort();
+        }
     }
 
     /**
@@ -98,14 +115,12 @@ class EventQueue implements EventQueueInterface
      */
     public function remove(callable $callable)
     {
-        $nqueue = new \SplPriorityQueue();
-        foreach ($this as $p) {
-            if ($p['data'] === $callable) {
-                continue;
+        foreach ($this->queue as $key => $val) {
+            if ($val['data'] === $callable) {
+                unset($this->queue[$key]);
+                break;
             }
-            $nqueue->insert($p['data'], (int) $p['priority']);
         }
-        $this->queue = $nqueue;
     }
 
     /**
@@ -113,7 +128,15 @@ class EventQueue implements EventQueueInterface
      */
     public function flush()
     {
-        $this->queue = new \SplPriorityQueue();
+        $this->queue = [];
+    }
+
+    /**
+     * {@inheritdic}
+     */
+    public function sort()
+    {
+        krsort($this->queue);
     }
 
     /**
@@ -124,8 +147,9 @@ class EventQueue implements EventQueueInterface
     )/*# : EventQueueInterface */ {
         $nqueue = clone $this;
         foreach ($queue as $data) {
-            $nqueue->insert($data['data'], (int) $data['priority']);
+            $nqueue->insert($data['data'], (int) $data['priority'], false);
         }
+        $nqueue->sort();
         return $nqueue;
     }
 }

@@ -15,6 +15,8 @@
 
 namespace Phossa\Event\Interfaces;
 
+use Phossa\Event\Exception;
+
 /**
  * EventQueueInterface
  *
@@ -35,13 +37,17 @@ interface EventQueueInterface extends \IteratorAggregate, \Countable
      *
      * @param  callable $callable
      * @param  int $priority priority
+     * @param  bool $sort sort by priority
      * @return void
+     * @throws Exception\InvalidArgumentException
+     *         if $priority not in 0 - 100
      * @access public
      * @api
      */
     public function insert(
         callable $callable,
-        /*# int */ $priority
+        /*# int */ $priority,
+        /*# bool */ $sort = true
     );
 
     /**
@@ -62,6 +68,15 @@ interface EventQueueInterface extends \IteratorAggregate, \Countable
      * @api
      */
     public function flush();
+
+    /**
+     * sort the queue by priority
+     *
+     * @return void
+     * @access public
+     * @api
+     */
+    public function sort();
 
     /**
      * Combine self with another event queue and return the new queue
