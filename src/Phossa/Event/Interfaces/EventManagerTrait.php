@@ -325,12 +325,9 @@ trait EventManagerTrait
     )/*# : array */ {
         $result = [];
         if (is_array($callable)) {
-            // format: [ 'method2', 20 ]
             if (isset($callable[1]) && is_int($callable[1])) {
                 $priority = $callable[1];
                 $xc = $callable[0];
-
-            // format: [ ['method3', 70], 'method4', ... ]
             } else {
                 foreach ($callable as $cc) {
                     $result = array_merge(
@@ -341,7 +338,6 @@ trait EventManagerTrait
                 return $result;
             }
         } elseif (is_string($callable)) {
-            // format: 'method1'
             $xc = $callable;
         }
 
