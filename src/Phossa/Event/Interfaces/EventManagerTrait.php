@@ -187,7 +187,7 @@ trait EventManagerTrait
      * @param  EventInterface $event
      * @param  EventQueueInterface $queue
      * @param  callable $callback (optional) a callback returns bool
-     * @return this
+     * @return EventManagerInterface this
      * @throws \Phossa\Event\Exception\RuntimeException
      *         rethrow any exception catched as RuntimeException
      * @access protected

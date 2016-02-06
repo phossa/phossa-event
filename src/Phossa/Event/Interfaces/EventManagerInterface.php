@@ -41,7 +41,7 @@ interface EventManagerInterface
      *
      * @param  EventInterface $event the event
      * @param  callable $callback (optional) a callback returns bool
-     * @return this
+     * @return EventManagerInterface this
      * @throws \Phossa\Event\Exception\RuntimeException
      *         rethrow any exception catched as RuntimeException
      * @access public
@@ -59,7 +59,7 @@ interface EventManagerInterface
      * @param  mixed $listener object or static class name or callable
      * @param  string $eventName event name or '' for all its events
      * @param  int $priority priority level, bigger one has high priority
-     * @return this
+     * @return EventManagerInterface this
      * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $listener not right, or format of callable not right
      * @throws \Phossa\Event\Exception\BadMethodCallExceptionException
@@ -78,7 +78,7 @@ interface EventManagerInterface
      *
      * @param  mixed $listener object or static class name or callable
      * @param  string $eventName event name or '' for all its attached events
-     * @return this
+     * @return EventManagerInterface this
      * @throws \Phossa\Event\Exception\InvalidArgumentException
      *         if $listener not right
      * @throws \Phossa\Event\Exception\BadMethodCallExceptionException
@@ -121,7 +121,7 @@ interface EventManagerInterface
      * Clear the event queue for $eventName
      *
      * @param  string $eventName the event name
-     * @return this
+     * @return EventManagerInterface this
      * @throws \Phossa\Event\Exception\BadMethodCallExceptionException
      *         if immutable
      * @access public

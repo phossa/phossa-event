@@ -49,7 +49,7 @@ interface EventDispatcherInterface
      * @param  string $eventName event name
      * @param  callable $callable the callable
      * @param  int $priority (optional) high number higher priority, 0 - 100
-     * @return this
+     * @return EventDispatcherInterface this
      * @access public
      * @api
      */
@@ -57,7 +57,7 @@ interface EventDispatcherInterface
         /*# string */ $eventName,
         callable $callable,
         /*# int */ $priority = 50
-    );
+    )/*# : EventDispatcherInterface */;
 
     /**
      * Attach a callable to event name and execute only once.
@@ -65,7 +65,7 @@ interface EventDispatcherInterface
      * @param  string $eventName event name
      * @param  callable $callable the callable
      * @param  int $priority (optional) high number higher priority, 0 - 100
-     * @return this
+     * @return EventDispatcherInterface this
      * @access public
      * @api
      */
@@ -73,7 +73,7 @@ interface EventDispatcherInterface
         /*# string */ $eventName,
         callable $callable,
         /*# int */ $priority = 50
-    );
+    )/*# : EventDispatcherInterface */;
 
     /**
      * Attach a callable to event name and execute that many times.
@@ -82,7 +82,7 @@ interface EventDispatcherInterface
      * @param  int $times times to execute
      * @param  callable $callable the callable
      * @param  int $priority (optional) high number higher priority, 0 - 100
-     * @return this
+     * @return EventDispatcherInterface this
      * @access public
      * @api
      */
@@ -91,7 +91,7 @@ interface EventDispatcherInterface
         /*# int */ $times,
         callable $callable,
         /*# int */ $priority = 50
-    );
+    )/*# : EventDispatcherInterface */;
 
     /**
      * Does $eventName have registered handlers
@@ -124,14 +124,14 @@ interface EventDispatcherInterface
      *
      * @param  string $eventName (optional) event name
      * @param  callable $callable (optional) the callable
-     * @return this
+     * @return EventDispatcherInterface this
      * @access public
      * @api
      */
     public function off(
         /*# string */ $eventName = '',
         callable $callable = null
-    );
+    )/*# : EventDispatcherInterface */;
 
     /**
      * Execute a callable when PHP error happens
@@ -143,21 +143,21 @@ interface EventDispatcherInterface
      * </code>
      *
      * @param  callable $callable the callable
-     * @return this
+     * @return EventDispatcherInterface this
      * @access public
      * @api
      */
-    public function error(callable $callable);
+    public function error(callable $callable)/*# : EventDispatcherInterface */;
 
     /**
      * Execute a callable when script ends
      *
      * @param  callable $callable the callable
-     * @return this
+     * @return EventDispatcherInterface this
      * @access public
      * @api
      */
-    public function ready(callable $callable);
+    public function ready(callable $callable)/*# : EventDispatcherInterface */;
 
     /**
      * Trigger an event and process it

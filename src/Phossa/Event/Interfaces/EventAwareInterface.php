@@ -44,7 +44,7 @@ interface EventAwareInterface
      *
      * @param  EventManagerInterface $eventManager event manager object
      * @param  EventInterface $eventPrototype (optional) event prototype
-     * @return this
+     * @return EventAwareInterface this
      * @see    \Phossa\Event\Interfaces\EventManagerInterface
      * @access public
      * @api
