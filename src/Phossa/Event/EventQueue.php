@@ -38,9 +38,9 @@ use Phossa\Event\Message\Message;
  * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventQueueInterface
- * @version 1.0.3
+ * @version 1.0.4
  * @since   1.0.0 added
- * @since   1.0.3 removed SplPriority to support HHVM
+ * @since   1.0.4 removed SplPriority to support HHVM
  */
 class EventQueue implements EventQueueInterface
 {

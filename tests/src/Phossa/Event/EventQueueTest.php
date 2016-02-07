@@ -77,7 +77,6 @@ class EventQueueTest
         $this->object->insert([$this->object, 'count'], 10);
     }
 
-
     /**
      * insert non callable
      *

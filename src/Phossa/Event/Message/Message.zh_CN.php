@@ -18,7 +18,7 @@
  * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Message\Message
- * @version 1.0.3
+ * @version 1.0.4
  * @since   1.0.1 added
  */
 return [
@@ -30,8 +30,9 @@ return [
     Message::CALLABLE_NOT_FOUND         => '事件 "%s" 无可执行函数',
     Message::CALLABLE_RUNTIME           => '事件执行错误: %s',
     Message::INVALID_EVENT_NAME         => '事件名称 "%s" 错误',
-    Message::INVALID_EVENT_PROPERTY    => '无效的事件属性 "%s"',
-    Message::INVALID_EVENT_MANAGER     => '无效的事件管理员类型 "%s"',
-    Message::IMMUTABLE_EVENT_METHOD    => '非法执行了固化方法 "%s"',
-    Message::METHOD_NOT_FOUND          => '"%s" 没有方法 "%s"',
+    Message::INVALID_EVENT_PROPERTY     => '无效的事件属性 "%s"',
+    Message::INVALID_EVENT_MANAGER      => '无效的事件管理员类型 "%s"',
+    Message::IMMUTABLE_EVENT_METHOD     => '非法执行了固化方法 "%s"',
+    Message::METHOD_NOT_FOUND           => '"%s" 没有方法 "%s"',
+    Message::INVALID_EVENT_PRIORITY     => '事件优先级错误 "%s"',
 ];

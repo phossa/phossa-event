@@ -27,8 +27,9 @@ use Phossa\Event\Exception;
  * @author  Hong Zhang <phossa@126.com>
  * @see     \IteratorAggregate
  * @see     \Countable
- * @version 1.0.3
+ * @version 1.0.4
  * @since   1.0.0 added
+ * @since   1.0.4 added sort()
  */
 interface EventQueueInterface extends \IteratorAggregate, \Countable
 {
@@ -37,7 +38,7 @@ interface EventQueueInterface extends \IteratorAggregate, \Countable
      *
      * @param  callable $callable
      * @param  int $priority priority
-     * @param  bool $sort sort by priority
+     * @param  bool $sort sort by priority (1.0.4)
      * @return void
      * @throws Exception\InvalidArgumentException
      *         if $priority not in 0 - 100
@@ -74,6 +75,7 @@ interface EventQueueInterface extends \IteratorAggregate, \Countable
      *
      * @return void
      * @access public
+     * @since  1.0.4
      * @api
      */
     public function sort();

@@ -1,6 +1,6 @@
 {
     "name": "phossa/phossa-event",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "license": "MIT",
     "type": "library",
     "description": "The event management package of Phossa framework",
@@ -20,7 +20,7 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phossa/phossa-shared": ">=1.0.4"
+        "phossa/phossa-shared": ">=1.0.6"
     },
     "archive": {
         "exclude": ["!vendor", "tests", "*phpunit.xml",  "composer.lock"]

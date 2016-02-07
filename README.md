@@ -1,5 +1,6 @@
 # phossa-event
 [![Build Status](https://travis-ci.org/phossa/phossa-event.svg?branch=master)](https://travis-ci.org/phossa/phossa-event.svg?branch=master)
+[![HHVM Status](http://hhvm.h4cc.de/badge/phossa/phossa-event.svg)](http://hhvm.h4cc.de/package/phossa/phossa-event)
 [![Latest Stable Version](https://poser.pugx.org/phossa/phossa-event/v/stable)](https://packagist.org/packages/phossa/phossa-event)
 [![License](https://poser.pugx.org/phossa/phossa-event/license)](https://packagist.org/packages/phossa/phossa-event)
 
@@ -23,7 +24,7 @@ or add the following lines to your `composer.json`
 ```json
 {
     "require": {
-       "phossa/phossa-event": "^1.0.2"
+       "phossa/phossa-event": "^1.0.4"
     }
 }
 ```
@@ -316,14 +317,14 @@ Usage
 Version
 ---
 
-1.0.3
+1.0.4
 
 Dependencies
 ---
 
 - PHP >= 5.4.0
 
-- phossa/phossa-shared >= 1.0.4
+- phossa/phossa-shared >= 1.0.6
 
 License
 ---
