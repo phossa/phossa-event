@@ -16,7 +16,6 @@
 namespace Phossa\Event;
 
 use Phossa\Event\Interfaces\EventQueueInterface;
-
 use Phossa\Event\Exception;
 use Phossa\Event\Message\Message;
 
