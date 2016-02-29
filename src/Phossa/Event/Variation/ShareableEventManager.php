@@ -21,8 +21,8 @@ use Phossa\Event\Interfaces\EventManagerInterface;
  * You can have lots of event managers but only one global copy
  *
  * <code>
- *     // get global copy by using `getShareable()`
- *     $globalEventManager = ShareableEventManager::getShareable();
+ *     // get global copy by using `getInstance()`
+ *     $globalEventManager = ShareableEventManager::getInstance();
  *
  *     // normal event managers
  *     $localEventManager  = new ShareableEventManager();

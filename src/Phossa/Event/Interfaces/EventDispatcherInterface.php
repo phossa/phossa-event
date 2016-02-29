@@ -137,10 +137,10 @@ interface EventDispatcherInterface
      * Execute a callable when PHP error happens
      *
      * The callable signature is
-     * <code>
+     * ```php
      *     function errorHandler($errno, $errstr, $errfile, $errline):bool {
      *     }
-     * </code>
+     * ```
      *
      * @param  callable $callable the callable
      * @return EventDispatcherInterface this

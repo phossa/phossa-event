@@ -164,8 +164,11 @@ trait EventManagerTrait
     public function clearEventQueue(
         /*# string */ $eventName
     )/*# : EventManagerInterface */ {
-        if ($eventName && $this->hasEventQueue($eventName)) {
-            unset($this->events[$eventName]);
+        $names = $this->globNames($eventName, $this->getEventNames());
+        foreach ($names as $name) {
+            if ($name && $this->hasEventQueue($name)) {
+                unset($this->events[$name]);
+            }
         }
         return $this;
     }

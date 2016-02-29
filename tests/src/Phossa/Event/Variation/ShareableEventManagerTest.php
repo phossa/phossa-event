@@ -49,16 +49,16 @@ class ShareableEventManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * the global copy
-     * @covers Phossa\Event\Variation\ShareableEventManager::getShareable
+     * @covers Phossa\Event\Variation\ShareableEventManager::getInstance
      */
-    public function testGetShareable()
+    public function testgetInstance()
     {
         // global copy not equals to local copy
-        $this->assertFalse($this->object === ShareableEventManager::getShareable());
+        $this->assertFalse($this->object === ShareableEventManager::getInstance());
 
         // global always a single one
-        $obj1 = ShareableEventManager::getShareable();
-        $obj2 = ShareableEventManager::getShareable();
+        $obj1 = ShareableEventManager::getInstance();
+        $obj2 = ShareableEventManager::getInstance();
         $this->assertTrue($obj1 === $obj2);
 
         // test global manager functionalities
@@ -76,7 +76,7 @@ class ShareableEventManagerTest extends \PHPUnit_Framework_TestCase
     public function testIsShareable()
     {
         // global one
-        $obj1 = ShareableEventManager::getShareable();
+        $obj1 = ShareableEventManager::getInstance();
         // local one
         $obj2 = new ShareableEventManager();
 
@@ -92,7 +92,7 @@ class ShareableEventManagerTest extends \PHPUnit_Framework_TestCase
     public function testClone1()
     {
         // global one
-        $obj1 = ShareableEventManager::getShareable();
+        $obj1 = ShareableEventManager::getInstance();
 
         // clone the global one
         $obj2 = clone $obj1;
@@ -108,7 +108,7 @@ class ShareableEventManagerTest extends \PHPUnit_Framework_TestCase
     public function testSleep()
     {
         // global one
-        $obj = ShareableEventManager::getShareable();
+        $obj = ShareableEventManager::getInstance();
 
         serialize($obj);
     }

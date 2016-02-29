@@ -7,7 +7,7 @@
 Introduction
 ---
 
-Phossa-event is an event management package for PHP. It decoupled from any
+Phossa-event is an event management library for PHP. It decoupled from any
 packages other than the `phossa/phossa-shared`. It requires PHP5.4 only.
 
 Installation
@@ -29,55 +29,169 @@ or add the following lines to your `composer.json`
 }
 ```
 
-Features
+Simple `EventDispatcher`
 ---
 
-- Simple event dispatching using `EventDispatcher`
+Simple event dispatching using `Phossa\Event\EventDispatcher`
+
+- Simple usage
 
   ```php
-      $dispatcher = new EventDispatcher();
+  $dispatcher = new EventDispatcher();
 
-      // bind event 'user.login' to a callable
-      $dispatcher->on('user.login', function(Event $evt) {
-          ...
-      });
+  // bind event 'user.login' to a callable
+  $dispatcher->on('user.login', function(Event $evt) {
+      // ...
+  });
 
-      // trigger the 'user.login' event
-      $dispatcher->trigger('user.login', [ 'user' => $user ]);
+  // trigger the 'user.login' event, passing data
+  $dispatcher->trigger('user.login', [ 'user' => $user ]);
   ```
 
    or use statically (global dispatching)
 
   ```php
-      // bind event with priority 60 (0 - 100, high # higher priority)
-      EventDispatcher::on('user.login', function(Event $evt) {
-          ...
-      }, 60);
+  // bind event with priority 60 (0 - 100, high # higher priority)
+  EventDispatcher::on('user.login', function(Event $evt) {
+      // ...
+  }, 60);
 
-      // trigger the 'user.login' event
-      EventDispatcher::trigger('user.login', [ 'user' => $user ]);
+  // trigger the 'user.login' event
+  EventDispatcher::trigger('user.login', [ 'user' => $user ]);
   ```
 
-- Complex event management use `EventManager` with full fledge support for
-  event listener, event subject, local event manager and global event manager
-  etc.
-
-- Event globbing. Able to listen to all events by using '*' or 'event*'.
+- Trigger for limited times
 
   ```php
-      // bind event 'user.login' to a callable
-      $dispatcher->on('user.login', function(Event $evt) {
-          ...
-          return false; // stop event propagation
-      });
+  // bind event for once
+  $dispatcher->one('user.login', function(Event $evt) {
+      // ...
+  });
 
-      // globbing
-      $dispatcher->on('user.*', function(Event $evt) {
-          ...
-      });
+  // allow 3 times
+  $dispatcher->many('user.tag', 3, function(Event $evt) {
+      // ...
+  });
   ```
 
-  or using event listener
+- Event globbing
+
+  ```php
+  // globbing
+  $dispatcher->on('user.*', function(Event $evt) {
+      //...
+  });
+  ```
+
+- Detach events
+
+  ```php
+  // detach
+  $dispatcher->off('user.*');
+  ```
+
+- Monitoring PHP errors
+
+  Execute a callable when PHP error happens.
+
+  ```php
+  // callable returns bool
+  $dispatcher->error(function($errno, $errstr, $errfile, $errline) {
+      // ...
+      return true;
+  });
+  ```
+
+- Execute a callable when script finishes
+
+  ```php
+  // run this after script ends
+  $dispatcher->ready(function() {
+      // ...
+  });
+  ```
+
+Full-fledged `EventManager`
+---
+
+Complex event management using `Phossa\Event\EventManager` with full fledge
+support for event listener, event subject, local event manager and global
+event manageretc.
+
+- Event listener
+
+  ```php
+  use Phossa\Event\Interfaces;
+
+  class MyListener implements Interfaces\EventListenerInteface
+  {
+      /*
+       * Get events and callables MyListener listens to
+       */
+      public function getEventsListening()
+      {
+          return array(
+              'eventName1' => 'method1', // method1 of $this
+              'eventName2' => array('method2', 20), // priority 20
+              'eventName3' => array( // multiple callables
+                  [ 'method3', 70 ],
+                  [ 'method4', 50 ]
+              )
+          );
+      }
+  }
+
+  $listener = new MyListener();
+  ```
+
+- Event manager
+
+  ```php
+  // create an event manager
+  $evtManager = new Event\EventManager();
+
+  // attach a listener object
+  $evtManager->attachListener($listener);
+
+  // attach a callable directly to 'oneSpecialEvent'
+  $callable = function(Event\Event $evt) {
+      ...
+  };
+  $evtManager->attachListener($callable, 'oneSpecialEvent');
+
+  // detach a callable
+  $evtManager->detachListener($callable);
+  ```
+
+- The event-aware subject
+
+  ```php
+  use Phossa\Event\Interfaces;
+
+  class MyEventAware implements Interfaces\EventAwareInterface
+  {
+      // add setEventManager() and triggerEvent()
+      use Interfaces\EventAwareTrait;
+
+      ...
+  }
+
+  $subject = new MyEventAware();
+  ```
+
+- Combine together
+
+  ```php
+  // set manager to event-aware subject
+  $subject->setEventManager($evtManager);
+
+  // trigger event
+  $subject->triggerEvent('eventName2');
+  ```
+
+- Event globbing
+
+  Able to listen to all events by using '*' or 'event*'.
 
   ```php
   use Phossa\Event\Interfaces\EventListenerInterface;
@@ -102,7 +216,7 @@ Features
   }
   ```
 
-- Support complext event management for static classes.
+- Event management for static classes.
 
   The static listener class,
 
@@ -208,8 +322,8 @@ Features
   local managers.
 
   ```php
-  // get global copy by using static method `getShareable()`
-  $globalEventManager = ShareableEventManager::getShareable();
+  // get global copy by using static method `getInstance()`
+  $globalEventManager = ShareableEventManager::getInstance();
 
   // normal event managers
   $localEventManager  = new ShareableEventManager();
@@ -222,9 +336,10 @@ Features
   }
   ```
 
-- Priority in event handling queue. Higher number means higher priority.
+Features
+---
 
-- Support PHP 5.4.
+- Supports PHP 5.4+, PHP 7.0+, HHVM.
 
 - PHP7 ready for return type declarations and argument type declarations.
 
@@ -232,99 +347,17 @@ Features
 
 - Decoupled packages can be used seperately without the framework.
 
-Usage
----
-
-- The simple event dispatcher
-
-- The listener
-
-  ```php
-  use Phossa\Event\Interfaces;
-
-  class MyListener implements Interfaces\EventListenerInteface
-  {
-      /*
-       * Get events and callables MyListener listens to
-       */
-      public function getEventsListening()
-      {
-          return array(
-              'eventName1' => 'method1', // method1 of $this
-              'eventName2' => array('method2', 20), // priority 20
-              'eventName3' => array( // multiple callables
-                  [ 'method3', 70 ],
-                  [ 'method4', 50 ]
-              )
-          );
-      }
-  }
-
-  $listener = new MyListener();
-  ```
-
-  or static listener class.(see examples in **Features**)
-
-- The event-aware subject
-
-  ```php
-  use Phossa\Event\Interfaces;
-
-  class MyEventAware implements Interfaces\EventAwareInterface
-  {
-      // add setEventManager() and triggerEvent()
-      use Interfaces\EventAwareTrait;
-
-      ...
-  }
-
-  $subject = new MyEventAware();
-  ```
-
-  or static class using events.(see examples in **Features**)
-
-- The event manager/dispatcher
-
-  ```php
-  // create an event manager/dispatcher
-  $evtManager = new Event\EventManager();
-
-  // attach a listener object
-  $evtManager->attachListener($listener);
-
-  // attach a callable directly to 'oneSpecialEvent'
-  $callable = function(Event\Event $evt) {
-      ...
-  };
-  $evtManager->attachListener($callable, 'oneSpecialEvent');
-
-  // detach a callable
-  $evtManager->detachListener($callable);
-  ```
-
-- The last piece
-
-  ```php
-  // set manager/dispatcher to event-aware subject
-  $subject->setEventManager($evtManager);
-
-  // trigger event
-  $subject->triggerEvent('eventName2');
-  ```
-
-  or static version.(see examples in **Features**)
-
 Version
 ---
 
-1.0.4
+1.0.5
 
 Dependencies
 ---
 
 - PHP >= 5.4.0
 
-- phossa/phossa-shared >= 1.0.6
+- phossa/phossa-shared >= 1.0.8
 
 License
 ---

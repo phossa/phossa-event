@@ -1,9 +1,9 @@
 {
     "name": "phossa/phossa-event",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "license": "MIT",
     "type": "library",
-    "description": "The event management package of Phossa framework",
+    "description": "A event management library for PHP",
     "keywords": ["phossa", "framework", "event"],
     "homepage": "https://github.com/phossa/phossa-event",
     "authors": [
@@ -20,7 +20,7 @@
     },
     "require": {
         "php": ">=5.4.0",
-        "phossa/phossa-shared": ">=1.0.6"
+        "phossa/phossa-shared": ">=1.0.8"
     },
     "archive": {
         "exclude": ["!vendor", "tests", "*phpunit.xml",  "composer.lock"]
