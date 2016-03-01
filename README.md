@@ -347,11 +347,6 @@ Features
 
 - Decoupled packages can be used seperately without the framework.
 
-Version
----
-
-1.0.5
-
 Dependencies
 ---
 

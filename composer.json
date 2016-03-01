@@ -1,6 +1,5 @@
 {
     "name": "phossa/phossa-event",
-    "version": "1.0.5",
     "license": "MIT",
     "type": "library",
     "description": "A event management library for PHP",
