@@ -12,6 +12,8 @@
  * @link      http://www.phossa.com/
  */
 
+namespace Phossa\Event\Message;
+
 /**
  * Chinese translation for Message.php
  *
