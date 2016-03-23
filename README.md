@@ -1,8 +1,8 @@
 # phossa-event
-[![Build Status](https://travis-ci.org/phossa/phossa-event.svg?branch=master)](https://travis-ci.org/phossa/phossa-event.svg?branch=master)
-[![HHVM Status](http://hhvm.h4cc.de/badge/phossa/phossa-event.svg)](http://hhvm.h4cc.de/package/phossa/phossa-event)
-[![Latest Stable Version](https://poser.pugx.org/phossa/phossa-event/v/stable)](https://packagist.org/packages/phossa/phossa-event)
-[![License](https://poser.pugx.org/phossa/phossa-event/license)](https://packagist.org/packages/phossa/phossa-event)
+[![Build Status](https://travis-ci.org/phossa/phossa-event.svg?branch=master)](https://travis-ci.org/phossa/phossa-event)
+[![HHVM](https://img.shields.io/hhvm/phossa/phossa-event.svg?style=flat)](http://hhvm.h4cc.de/package/phossa/phossa-event)
+[![Latest Stable Version](https://img.shields.io/packagist/vpre/phossa/phossa-event.svg?style=flat)](https://packagist.org/packages/phossa/phossa-event)
+[![License](https://poser.pugx.org/phossa/phossa-event/license)](http://mit-license.org/)
 
 Introduction
 ---
@@ -24,7 +24,7 @@ or add the following lines to your `composer.json`
 ```json
 {
     "require": {
-       "phossa/phossa-event": "^1.0.4"
+       "phossa/phossa-event": "1.*"
     }
 }
 ```
