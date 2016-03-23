@@ -36,7 +36,7 @@ trait EventDispatcherTrait
     /**
      * event prototype
      *
-     * @var    callable
+     * @var    EventInterface
      * @access protected
      */
     protected $event_proto;
