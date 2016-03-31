@@ -52,6 +52,7 @@ class EventDispatcher implements EventDispatcherInterface
      *
      * @var    EventDispatcherInterface[]
      * @access private
+     * @staticvar
      */
     private static $instances = [];
 
