@@ -25,6 +25,7 @@ namespace Phossa\Event\Interfaces;
  * @version 1.0.3
  * @since   1.0.0 added
  * @since   1.0.3 changed to event prototype
+ * @since   1.0.5 added getEventManager()
  */
 interface EventAwareInterface
 {
@@ -52,6 +53,17 @@ interface EventAwareInterface
         EventManagerInterface $eventManager,
         EventInterface $eventPrototype = null
     )/*# : EventAwareInterface */;
+
+    /**
+     * Get the event manager
+     *
+     * @return EventManagerInterface
+     * @throws \Phossa\Event\Exception\NotFoundException
+     *         if event manager not set yet
+     * @access public
+     * @api
+     */
+    public function getEventManager()/*# : EventManagerInterface */;
 
     /**
      * Trigger an event and processed it by event manager, return the event

@@ -27,9 +27,10 @@ use Phossa\Event\Message\Message;
  * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventAwareInterface
- * @version 1.0.3
+ * @version 1.0.5
  * @since   1.0.0 added
  * @since   1.0.3 changed to event prototype
+ * @since   1.0.5 added getEventManager()
  */
 trait EventAwareTrait
 {
@@ -66,26 +67,35 @@ trait EventAwareTrait
     /**
      * {@inheritDoc}
      */
+    public function getEventManager()/*# : EventManagerInterface */
+    {
+        if (null === $this->event_manager) {
+            throw new Exception\NotFoundException(
+                Message::get(
+                    Message::MANAGER_NOT_FOUND,
+                    get_class()
+                ),
+                Message::MANAGER_NOT_FOUND
+            );
+        }
+        return $this->event_manager;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function triggerEvent(
         /*# string */ $eventName,
         array $properties = []
     )/*# : EventInterface */ {
-        if (null !== $this->event_manager) {
-            if (is_null($this->event_proto)) {
-                $evt = new Event($eventName, $this, $properties);
-            } else {
-                $evt = clone $this->event_proto;
-                $evt($eventName, $this, $properties);
-            }
-            $this->event_manager->processEvent($evt);
-            return $evt;
+        $evtManager = $this->getEventManager();
+        if (is_null($this->event_proto)) {
+            $evt = new Event($eventName, $this, $properties);
+        } else {
+            $evt = clone $this->event_proto;
+            $evt($eventName, $this, $properties);
         }
-        throw new Exception\NotFoundException(
-            Message::get(
-                Message::MANAGER_NOT_FOUND,
-                get_class()
-            ),
-            Message::MANAGER_NOT_FOUND
-        );
+        $evtManager->processEvent($evt);
+        return $evt;
     }
 }
