@@ -19,15 +19,14 @@ namespace Phossa\Event\Interfaces;
  *
  * Allow implementing static class has the ability to use events.
  *
- * @todo needs different property/method names since one class may need to
- *       static and dynamic event capabilities!!
  * @interface
  * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
- * @version 1.0.6
+ * @version 1.0.7
  * @since   1.0.0 added
  * @since   1.0.3 changed to event prototype
  * @since   1.0.6 added getEventManager()
+ * @since   1.0.7 rename function names
  */
 interface EventAwareStaticInterface
 {
@@ -38,7 +37,7 @@ interface EventAwareStaticInterface
      * other than the 'Phossa\Event\Event', user may pass a prototype.
      *
      * <code>
-     *     MyClass::setEventManager(
+     *     MyClass::setEventManagerStatically(
      *         $evtManager,
      *         new MyEvent('prototype')
      *     );
@@ -54,7 +53,7 @@ interface EventAwareStaticInterface
      * @static
      * @api
      */
-    public static function setEventManager(
+    public static function setEventManagerStatically(
         EventManagerInterface $eventManager,
         EventInterface $eventPrototype = null
     );
@@ -69,7 +68,7 @@ interface EventAwareStaticInterface
      * @static
      * @api
      */
-    public static function getEventManager()/*# : EventManagerInterface */;
+    public static function getEventManagerStatically()/*# : EventManagerInterface */;
 
     /**
      * Trigger an event and processed it by event manager, return the event
@@ -86,7 +85,7 @@ interface EventAwareStaticInterface
      * @static
      * @api
      */
-    public static function triggerEvent(
+    public static function triggerEventStatically(
         /*# string */ $eventName,
         array $properties = []
     )/*# : EventInterface */;

@@ -266,10 +266,10 @@ event manageretc.
   $evtManager->attachListener(StaticListener::CLASS);
 
   // set manager/dispatcher to event-aware static subject class
-  StaticEventAware::setEventManager($evtManager);
+  StaticEventAware::setEventManagerStatically($evtManager);
 
   // trigger event by the static subject class
-  StaticEventAware::triggerEvent('eventName2');
+  StaticEventAware::triggerEventStatically('eventName2');
   ```
 
 - Composite event manager

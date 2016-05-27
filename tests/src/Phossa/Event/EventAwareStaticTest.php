@@ -6,8 +6,6 @@ namespace Phossa\Event;
  */
 class EventAwareStaticTest extends \PHPUnit_Framework_TestCase
 {
-
-
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -28,11 +26,11 @@ class EventAwareStaticTest extends \PHPUnit_Framework_TestCase
     /**
      * set event manager for static class
      *
-     * @covers Phossa\Event\EventAware::setEventManager
+     * @covers Phossa\Event\EventAwareStatic::setEventManagerStatically
      */
     public function testSetEventManager1()
     {
-        EventAwareStatic::setEventManager(
+        EventAwareStatic::setEventManagerStatically(
             new EventManager()
         );
     }
@@ -40,18 +38,18 @@ class EventAwareStaticTest extends \PHPUnit_Framework_TestCase
     /**
      * set event manager and event factory for static class
      *
-     * @covers Phossa\Event\EventAware::setEventManager
+     * @covers Phossa\Event\EventAwareStatic::setEventManagerStatically
      */
     public function testSetEventManager2()
     {
-        EventAwareStatic::setEventManager(
+        EventAwareStatic::setEventManagerStatically(
             new EventManager(),
             new Event('prototype')
         );
     }
 
     /**
-     * @covers Phossa\Event\EventAware::triggerEvent
+     * @covers Phossa\Event\EventAwareStatic::triggerEventStatically
      */
     public function testTriggerEvent()
     {
@@ -61,9 +59,9 @@ class EventAwareStaticTest extends \PHPUnit_Framework_TestCase
         $manager->attachListener(new Listener());
         $manager->attachListener('Phossa\\Event\\ListenerStatic');
 
-        EventAwareStatic::setEventManager($manager);
+        EventAwareStatic::setEventManagerStatically($manager);
 
-        $e1 = EventAwareStatic::triggerEvent('evtTest4');
+        $e1 = EventAwareStatic::triggerEventStatically('evtTest4');
 
         // has 'testY'
         $this->assertArrayHasKey('testY', $e1->getProperties());
@@ -71,7 +69,7 @@ class EventAwareStaticTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayNotHasKey('testZ', $e1->getProperties());
 
         // both object/static listener has 'evtTest2'
-        $e2 = EventAwareStatic::triggerEvent('evtTest2', ['x' => 'xx']);
+        $e2 = EventAwareStatic::triggerEventStatically('evtTest2', ['x' => 'xx']);
         $this->assertArrayHasKey('testD', $e2->getProperties());
         $this->assertArrayHasKey('s_testDD', $e2->getProperties());
         $this->assertArrayHasKey('x', $e2->getProperties());

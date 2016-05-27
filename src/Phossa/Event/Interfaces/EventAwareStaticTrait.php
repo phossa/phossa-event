@@ -36,10 +36,11 @@ use Phossa\Event\Message\Message;
  * @package Phossa\Event
  * @author  Hong Zhang <phossa@126.com>
  * @see     \Phossa\Event\Interfaces\EventAwareStaticInterface
- * @version 1.0.6
+ * @version 1.0.7
  * @since   1.0.0 added
  * @since   1.0.3 changed to event prototype
  * @since   1.0.6 added getEventManager()
+ * @since   1.0.7 rename function names
  */
 trait EventAwareStaticTrait
 {
@@ -50,7 +51,7 @@ trait EventAwareStaticTrait
      * @access private
      * @static
      */
-    private static $event_manager = [];
+    private static $s_event_manager = [];
 
     /**
      * event prototypes for static class
@@ -59,34 +60,34 @@ trait EventAwareStaticTrait
      * @access private
      * @static
      */
-    private static $event_proto   = [];
+    private static $s_event_proto   = [];
 
     /**
      * {@inheritDoc}
      */
-    public static function setEventManager(
+    public static function setEventManagerStatically(
         EventManagerInterface $eventManager,
         EventInterface $eventPrototype = null
     ) {
         $class = get_called_class();
 
         // set event_manager
-        self::$event_manager[$class] = $eventManager;
+        self::$s_event_manager[$class] = $eventManager;
 
         // set event prototype
         if (!is_null($eventPrototype)) {
-            self::$event_proto[$class] = $eventPrototype;
+            self::$s_event_proto[$class] = $eventPrototype;
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public static function getEventManager()/*# : EventManagerInterface */
+    public static function getEventManagerStatically()/*# : EventManagerInterface */
     {
         // manager not found
         $class = get_called_class();
-        if (!isset(self::$event_manager[$class])) {
+        if (!isset(self::$s_event_manager[$class])) {
             throw new Exception\NotFoundException(
                 Message::get(
                     Message::MANAGER_NOT_FOUND,
@@ -95,22 +96,22 @@ trait EventAwareStaticTrait
                 Message::MANAGER_NOT_FOUND
             );
         }
-        return self::$event_manager[$class];
+        return self::$s_event_manager[$class];
     }
 
     /**
      * {@inheritDoc}
      */
-    public static function triggerEvent(
+    public static function triggerEventStatically(
         /*# string */ $eventName,
         array $properties = []
     )/*# : EventInterface */ {
         $class = get_called_class();
-        $manager = static::getEventManager();
+        $manager = static::getEventManagerStatically();
 
         // event prototype
-        if (isset(self::$event_proto[$class])) {
-            $evt = clone self::$event_proto[$class];
+        if (isset(self::$s_event_proto[$class])) {
+            $evt = clone self::$s_event_proto[$class];
             $evt($eventName, $class, $properties);
         } else {
             $evt = new Event($eventName, $class, $properties);
