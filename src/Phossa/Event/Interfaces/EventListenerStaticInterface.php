@@ -30,7 +30,7 @@ interface EventListenerStaticInterface
      *
      * e.g.
      * <code>
-     * public static function getEventsListening()
+     * public static function getEventsListeningStatically()
      * {
      *     return array(
      *         eventName1 => 'method1', // method1 of static class
@@ -48,5 +48,5 @@ interface EventListenerStaticInterface
      * @static
      * @api
      */
-    public static function getEventsListening()/*# : array */;
+    public static function getEventsListeningStatically()/*# : array */;
 }

@@ -7,14 +7,14 @@ use Phossa\Event\Interfaces\EventListenerStaticInterface;
 class ListenerStatic implements EventListenerStaticInterface
 {
     /*
-     * able to execute all methods defined in getEventsListening()
+     * able to execute all methods defined in getEventsListeningStatically()
      */
     public static function __callStatic($name, $arguments) {
         $evt = $arguments[0];
         $evt->setProperty('s_' . $name, 'Static ' . $name);
     }
 
-    public static function getEventsListening()
+    public static function getEventsListeningStatically()
     {
         return [
             'evtTest1' => 'testC',

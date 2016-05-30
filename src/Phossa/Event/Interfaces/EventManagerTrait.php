@@ -297,7 +297,7 @@ trait EventManagerTrait
             $evts = $listener->getEventsListening();
         } else {
             /* @var $listener EventListenerStaticInterface */
-            $evts = $listener::getEventsListening();
+            $evts = $listener::getEventsListeningStatically();
         }
 
         if ($eventName != '') {
