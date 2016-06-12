@@ -57,8 +57,18 @@ trait EventDispatcherTrait
         callable $callable,
         /*# int */ $priority = 50
     ) {
-        return $this->event_manager
-            ->attachListener($callable, $eventName, $priority);
+        $this->event_manager
+             ->attachListener($callable, $eventName, $priority);
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function attach($listener)/*# : EventManagerInterface */
+    {
+        $this->event_manager->attachListener($listener);
+        return $this;
     }
 
     /**
@@ -93,8 +103,10 @@ trait EventDispatcherTrait
             return $res;
         };
 
-        return $this->event_manager
-            ->attachListener($new, $eventName, $priority);
+        $this->event_manager
+             ->attachListener($new, $eventName, $priority);
+
+        return $this;
     }
 
     /**
@@ -113,7 +125,8 @@ trait EventDispatcherTrait
         /*# string */ $eventName = '',
         callable $callable = null
     ) {
-        return $this->event_manager->detachListener($callable, $eventName);
+        $this->event_manager->detachListener($callable, $eventName);
+        return $this;
     }
 
     /**

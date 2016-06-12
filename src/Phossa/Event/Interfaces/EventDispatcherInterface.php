@@ -59,6 +59,18 @@ interface EventDispatcherInterface
     )/*# : EventDispatcherInterface */;
 
     /**
+     * Attach a listener with all its events
+     *
+     * @param  mixed $listener object or static class name
+     * @return EventDispatcherInterface this
+     * @throws \Phossa\Event\Exception\InvalidArgumentException
+     *         if $listener not right, or format of callable not right
+     * @access public
+     * @api
+     */
+    public function attach($listener)/*# : EventDispatcherInterface */;
+
+    /**
      * Attach a callable to event name and execute only once.
      *
      * @param  string $eventName event name
