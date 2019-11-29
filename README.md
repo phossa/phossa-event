@@ -1,9 +1,9 @@
-# phossa-event
+# phossa-event [ABANDONED]
 [![Build Status](https://travis-ci.org/phossa/phossa-event.svg?branch=master)](https://travis-ci.org/phossa/phossa-event)
-[![HHVM](https://img.shields.io/hhvm/phossa/phossa-event.svg?style=flat)](http://hhvm.h4cc.de/package/phossa/phossa-event)
 [![Latest Stable Version](https://img.shields.io/packagist/vpre/phossa/phossa-event.svg?style=flat)](https://packagist.org/packages/phossa/phossa-event)
 [![License](https://poser.pugx.org/phossa/phossa-event/license)](http://mit-license.org/)
 
+**See new lib at [phoole/event](https://github.com/phoole/event)**
 Introduction
 ---
 
